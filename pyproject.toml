@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "dayz-admin-tools"
+version = "0.1.0"
+description = ""
+authors = ["idarthjedi <jediah@logiodice.com>"]
+readme = "README.md"
+packages = [{include = "dayz_admin_tools"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
