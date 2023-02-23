@@ -1,20 +1,20 @@
-from . fManager import FileManager
+from dayz_admin_tools.utilities.files.fManager import FileManager
+
 """XML File Manager
 
-Creates an Instance of an XML File for various Management functions
+Creates an Instance of a XML File for various Management functions
 """
 
 
 class XMLManager(FileManager):
 
-    def __init__(self, pathname: str):
-        super().__init__(pathname)
+    @staticmethod
+    def validate_files(filepath: str) -> tuple[bool, list]:
         pass
 
-    def validate(self):
-        print(f"Validating {self._pathname} XML file!")
-        pass
+    def __init__(self):
+        super().__init__()
 
 
 if __name__ == "__main__":
-    file1 = XMLManager("file.xml")
+    pass
