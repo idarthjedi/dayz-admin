@@ -24,8 +24,9 @@ parser.add_argument("-d", "--dir",
                          "Multiple directories can be added using spaces between them",
                     action="append")
 
-if len(sys.argv) < 2:
+if len(sys.argv) < 5:
     parser.print_help()
+    exit()
 
 args = parser.parse_args()
 
