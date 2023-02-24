@@ -9,7 +9,7 @@ File Manager for JSON objects
 
 class JSONManager(FileManager):
     @staticmethod
-    def validate_files(filepath: str) -> tuple[bool, list]:
+    def validate_files(filepath: str) -> tuple[bool, int, list]:
         """
 
         :param filepath: location of the directories & subdirectories to search for JSON files
@@ -18,19 +18,19 @@ class JSONManager(FileManager):
 
         validated = True
         output = []
+        file_count = 0
 
-        for root, dirs, files in os.walk(filepath):
-            for file in files:
-                if file.endswith(".json") and not file.startswith("."):
-                    filename = os.path.join(root, file)
-                    with open(filename) as validate_file:
-                        try:
-                            json.load(validate_file)
-                        except json.JSONDecodeError as error:
-                            output.append(filename)
-                            validated = False
+        files = super(JSONManager, JSONManager).find_files(filepath, ".json")
+        for file in files:
+            with open(file) as validate_file:
+                try:
+                    json.load(validate_file)
+                    file_count += 1
+                except json.JSONDecodeError as error:
+                    output.append(file)
+                    validated = False
 
-        return validated, output
+        return validated, file_count, output
 
     def __init__(self):
         super().__init__()
