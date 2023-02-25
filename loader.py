@@ -14,8 +14,7 @@ if __name__ == "__main__":
                                                  "only one instance of every class in all types.xml files.",
                                      )
     parser.add_argument("-d", "--dir",
-                        help="Specify a directory to search for files to validate."\
-                             "Multiple directories can be added using spaces between them",
+                        help="Specify the root Profiles directory of DayZ to search for files to validate.",
                         action="store")
 
     if len(sys.argv) < 3:
