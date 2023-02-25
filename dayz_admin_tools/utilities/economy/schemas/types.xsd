@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="types" type="typesType"/>
+  <xs:complexType name="flagsType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="count_in_cargo" use="required" />
+        <xs:attribute type="xs:string" name="count_in_hoarder" use="required"/>
+        <xs:attribute type="xs:string" name="count_in_map" use="required"/>
+        <xs:attribute type="xs:string" name="count_in_player" use="required"/>
+        <xs:attribute type="xs:string" name="crafted" use="required"/>
+        <xs:attribute type="xs:string" name="deloot" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="categoryType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="usageType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="required" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="typeType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="nominal" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="lifetime" minOccurs="0" maxOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="restock" minOccurs="0" maxOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="xs:string" name="min" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="quantmin"  minOccurs="0" maxOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="quantmax"  minOccurs="0" maxOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element name="cost"  minOccurs="0" maxOccurs="1">
+        <xs:simpleType>
+          <xs:restriction base="xs:integer">
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+      <xs:element type="flagsType" minOccurs="0" maxOccurs="1" name="flags"/>
+      <xs:element type="categoryType" name="category" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="tagType" name="tag" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="usageType" name="usage" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="valueType" name="value" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="valueType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="tagType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="typesType">
+    <xs:sequence>
+      <xs:element type="typeType" name="type" maxOccurs="unbounded" minOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
