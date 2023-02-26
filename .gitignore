@@ -130,3 +130,6 @@ dmypy.json
 
 # IDEs
 .idea/
+
+# App specific details
+app/config/app-config.json
