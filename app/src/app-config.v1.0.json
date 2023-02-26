@@ -1,0 +1,12 @@
+{
+  "config-version" : 1.0,
+  "properties" : {
+    "dayz-profile-dir": "",
+    "other_dirs": {
+      "json": [
+      ],
+      "xml": [
+      ]
+    }
+  }
+}
