@@ -28,13 +28,14 @@ def load_profiles(profiles_directory: str) -> tuple[list, list, Types]:
         if not success:
             errors.append(error)
 
+    print(Fore.GREEN+f"The following files were loaded, validated against a schema, and checked for unique values:{os.linesep}")
+    [print(f"\t{Fore.GREEN}{x}") for x in found_files]
+    print(f"{os.linesep}")
+
     if len(errors) > 0:
         for error_list in errors:
             for error in error_list:
                 print(Fore.RED + error)
-    else:
-        print(Fore.GREEN+f"The following files were loaded, validated against a schema, and verified for unique values:{os.linesep}")
-        [print(f"\t{Fore.GREEN}{x}") for x in found_files]
 
     return found_files, errors, econ_types
 
