@@ -91,7 +91,7 @@ class Ui_MainWindow(QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "DayZ Admin Tools Config Editor"))
         self.pushButton_addJSON.setText(_translate("MainWindow", "+"))
         self.label.setText(_translate("MainWindow", "DayZ Profile Location"))
         self.label_2.setText(_translate("MainWindow", "DayZ JSON File Location(s)"))
@@ -125,13 +125,13 @@ class Ui_MainWindow(QMainWindow):
         return
 
     def _removeJSONLocation(self):
-        current_row = self.lstJSONLocation.currentRow()
-        if not current_row:
-            return
 
-        current_item = self.lstJSONLocation.takeItem(current_row)
-        del current_item
-        return
+        for item in self.lstJSONLocation.selectedItems():
+            current_item = self.lstJSONLocation.takeItem(
+                self.lstJSONLocation.indexFromItem(item).row())
+            del current_item
+
+            return
 
     def _addXMLLocation(self):
         fileName = self.getDirectory("Locate XML Directory", self.lnProfileLocation.text())
@@ -141,12 +141,11 @@ class Ui_MainWindow(QMainWindow):
         return
 
     def _removeXMLLocation(self):
-        current_row = self.lstXMLLocation.currentRow()
-        if not current_row:
-            return
 
-        current_item = self.lstXMLLocation.takeItem(current_row)
-        del current_item
+        for item in self.lstXMLLocation.selectedItems():
+            current_item = self.lstXMLLocation.takeItem(
+                self.lstXMLLocation.indexFromItem(item).row())
+            del current_item
 
         return
 
@@ -188,11 +187,8 @@ class Ui_MainWindow(QMainWindow):
 
     def saveConfig(self):
 
-        data = {}
-        data["config-version"] = "1.0"
-
-        properties = {}
-        properties["dayz-profile-dir"] = self.lnProfileLocation.text()
+        data = {"config-version": "1.0"}
+        properties = {"dayz-profile-dir": self.lnProfileLocation.text()}
 
         other_dirs, json_dirs, xml_dirs = {}, {}, {}
         json_items, xml_items = [], []
@@ -207,8 +203,6 @@ class Ui_MainWindow(QMainWindow):
         other_dirs["xml"] = xml_items
         properties["other_dirs"] = other_dirs
         data["properties"] = properties
-
-        # print(json.dumps(data, indent=2))
 
         with open("app-config.json", mode="w") as config_file:
             config_file.write(json.dumps(data))
