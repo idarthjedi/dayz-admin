@@ -8,6 +8,8 @@
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QFileDialog, QWidget, QMessageBox, QMainWindow
+from config import config
+
 import os
 import json
 
@@ -102,8 +104,14 @@ class Ui_MainWindow(QMainWindow):
         self.pushButton_addXML.setText(_translate("MainWindow", "+"))
         self.pushButton_removeJSON.setText(_translate("MainWindow", "-"))
 
-        self.loadConfig()
+        profile_dir, json_dir, xml_dir = config.loadConfig()
 
+        self.lnProfileLocation.setText(profile_dir)
+        for path in json_dir:
+            self.lstJSONLocation.addItem(path)
+
+        for path in xml_dir:
+            self.lstXMLLocation.addItem(path)
 
     def getDirectory(self, title: str, start_dir: str):
 
@@ -159,38 +167,8 @@ class Ui_MainWindow(QMainWindow):
 
         return
 
-    def loadConfig(self):
-        # Load config file if it exists
-        if not os.path.exists("app-config.json"):
-            with open("src/app-config.latest.json", "r") as src:
-                with open("app-config.json", "w") as dest:
-                    dest.write(src.read())
-
-        if os.path.exists("app-config.json"):
-            with open('app-config.json') as config_file:
-                try:
-                    config = json.load(config_file)
-                    _profiles_directory = config["properties"]["dayz-profile-dir"]
-                    _json_directory = config["properties"]["other_dirs"]["json"]
-                    _xml_directory = config["properties"]["other_dirs"]["xml"]
-                except json.JSONDecodeError as error:
-                    raise "Cannot validate app-config.json"
-
-            self.lnProfileLocation.setText(_profiles_directory)
-            for path in _json_directory:
-                self.lstJSONLocation.addItem(path)
-
-            for path in _xml_directory:
-                self.lstXMLLocation.addItem(path)
-
-        return
-
     def saveConfig(self):
 
-        data = {"config-version": "1.0"}
-        properties = {"dayz-profile-dir": self.lnProfileLocation.text()}
-
-        other_dirs, json_dirs, xml_dirs = {}, {}, {}
         json_items, xml_items = [], []
 
         for index in range(self.lstJSONLocation.count()):
@@ -199,15 +177,9 @@ class Ui_MainWindow(QMainWindow):
         for index in range(self.lstXMLLocation.count()):
             xml_items.append(str(self.lstXMLLocation.item(index).text()))
 
-        other_dirs["json"] = json_items
-        other_dirs["xml"] = xml_items
-        properties["other_dirs"] = other_dirs
-        data["properties"] = properties
-
-        with open("app-config.json", mode="w") as config_file:
-            config_file.write(json.dumps(data))
-
-        return
+        config.saveConfig(self.lnProfileLocation.text(),
+                          json_items,
+                          xml_items)
 
 
 if __name__ == "__main__":

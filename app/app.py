@@ -3,6 +3,7 @@ from validator import validate_json, validate_xml
 from loader import load_profiles
 from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
 from dayz_admin_tools.utilities.economy.Types import Types
+from dayz_admin_tools.utilities.economy.Type import Type
 
 import mainConfig
 import sys
@@ -12,6 +13,8 @@ import json
 _profiles_directory = ""
 _json_directory = ""
 _xml_directory = ""
+
+_debug = True
 
 
 def main():
@@ -33,6 +36,9 @@ def main():
     else:
         found_files, error_files, loaded_types = load_profiles(_profiles_directory)
 
+#    for type_item in loaded_types.types():
+#        print(type_item.filesource)
+
     return
 
 
@@ -45,7 +51,7 @@ def readconfig():
     global _json_directory
     global _xml_directory
 
-    if not os.path.exists('app-config.json'):
+    if not os.path.exists('config/app-config.json'):
         # view in GUI
         pass
 
@@ -56,7 +62,7 @@ def readconfig():
     MainWindow.show()
     ret = app.exec()
 
-    with open('app-config.json') as config_file:
+    with open('config/app-config.json') as config_file:
         try:
             config = json.load(config_file)
             _profiles_directory = config["properties"]["dayz-profile-dir"]
