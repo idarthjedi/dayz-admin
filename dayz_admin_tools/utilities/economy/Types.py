@@ -3,16 +3,17 @@ import os
 from lxml import etree
 from dayz_admin_tools.config import ROOT_DIR
 from dayz_admin_tools.utilities.economy.Type import Type
+from colorama import Fore, Back, Style
 
 
-class Types:
-    _types = {}
+class Types(dict):
+    # _types = {}
 
     def __init__(self):
         # load the XSD file
         xmlschema_doc = etree.parse(ROOT_DIR + "/dayz_admin_tools/utilities/economy/schemas/types.xsd")
         self._xmlschema = etree.XMLSchema(xmlschema_doc)
-        pass
+        super().__init__()
 
     @staticmethod
     def find_type_files(root_directory: str) -> tuple[bool, list]:
@@ -21,9 +22,7 @@ class Types:
         :param root_directory: Provide the root Profiles directory for the DayZ Server
         :return:
         | bool: Success or Failure
-        | list: List of type files loaded
-
-        :exception individual type items must be unique across all types.xml files.
+        | list: List of type files found
         """
 
         list_files = []
@@ -45,8 +44,12 @@ class Types:
 
         return True, list_files
 
-    def load_types(self, file: str) -> tuple[bool, str]:
-
+    def load_types(self, file: str) -> tuple[bool, list]:
+        """
+        Loads individual types across all type files, will record errors if duplicates are found to already exist.
+        :param file: name of the file to load into the types collection
+        :return: True for no errors, False for errors, and a list of duplicate items
+        """
         errors = []
         xml_doc = etree.parse(file)
         try:
@@ -60,11 +63,14 @@ class Types:
         all_types = xml_doc.xpath("//types/type")
         for each_type in all_types:
             obj_name = each_type.attrib['name']
-            if obj_name in self._types:
-                errors.append(f"Object {obj_name} already exists in types.xml with source: " \
-                              f"{self._types[obj_name].filesource}.{os.linesep}\tError while parsing {file}{os.linesep}")
+            if obj_name in self:
+                errors.append(f"Object {obj_name} duplications:{os.linesep}"\
+                              f"\t{Fore.GREEN}Winner: {self[obj_name].filesource}{os.linesep}"\
+                              f"\t{Fore.RED}Loser: {file}.")
 
-            self._types[obj_name] = Type(obj_name, file)
+            else:
+                # Only append if there wasn't a duplicate already
+                self[obj_name] = Type(obj_name, file)
 
         return len(errors) == 0, errors
 
@@ -72,3 +78,6 @@ class Types:
         # create a type class
         # add it to the dictionary
 
+    def types(self) -> Type:
+        for type_instance in self.values():
+            yield type_instance
