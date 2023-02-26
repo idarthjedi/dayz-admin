@@ -7,15 +7,24 @@ import argparse
 import sys
 
 
-def validate_profiles(profiles_directory: str):
+def load_profiles(profiles_directory: str) -> tuple[list, list, Types]:
+    """
 
+    :param profiles_directory: DayZ Server Profile Directory to load all the Type XML Files
+
+    :return:
+        list->found_files: All the type files that were found in the directory<br/>
+        list->errors: All the files that had errors
+        Types: Collection of all the types loaded across all the files
+    """
     errors = []
 
     econ_types = Types()
-    success, found_files = econ_types.load_type_files(profiles_directory)
+    success, found_files = Types.find_type_files(profiles_directory)
+    # success, found_files = econ_types.load_type_files(profiles_directory)
 
     for f in found_files:
-        success, error = econ_types.load_file(f)
+        success, error = econ_types.load_types(f)
         if not success:
             errors.append(error)
 
@@ -26,6 +35,8 @@ def validate_profiles(profiles_directory: str):
     else:
         print(Fore.GREEN+f"The following files were loaded, validated against a schema, and verified for unique values:{os.linesep}")
         [print(f"\t{Fore.GREEN}{x}") for x in found_files]
+
+    return found_files, errors, econ_types
 
 
 if __name__ == "__main__":
@@ -45,4 +56,4 @@ if __name__ == "__main__":
         exit()
 
     args = parser.parse_args()
-    validate_profiles(args.dir)
+    load_profiles(args.dir)

@@ -1,12 +1,13 @@
+from colorama import Fore, Back, Style, init as colorama_init
+from validator import validate_json, validate_xml
+from loader import load_profiles
+from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
+from dayz_admin_tools.utilities.economy.Types import Types
+
+import mainConfig
 import sys
 import os
 import json
-from colorama import Fore, Back, Style, init as colorama_init
-from validator import validate_json, validate_xml
-from loader import validate_profiles
-# import qtConfig
-import mainConfig
-from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
 
 _profiles_directory = ""
 _json_directory = ""
@@ -14,6 +15,11 @@ _xml_directory = ""
 
 
 def main():
+
+    loaded_types = Types
+    found_files = ()
+    error_files = ()
+
     colorama_init()
     readconfig()
     for path in _json_directory:
@@ -25,7 +31,7 @@ def main():
     if len(_profiles_directory) <= 0:
         print(Fore.RED+f"No DayZ Profile folder selected, exiting...")
     else:
-        validate_profiles(_profiles_directory)
+        found_files, error_files, loaded_types = load_profiles(_profiles_directory)
 
     return
 

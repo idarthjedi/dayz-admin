@@ -14,12 +14,14 @@ class Types:
         self._xmlschema = etree.XMLSchema(xmlschema_doc)
         pass
 
-    def load_type_files(self, root_directory: str) -> tuple[bool, list]:
+    @staticmethod
+    def find_type_files(root_directory: str) -> tuple[bool, list]:
         """
 
         :param root_directory: Provide the root Profiles directory for the DayZ Server
-        :return: bool: Success or Failure
-                 list: List of type files loaded
+        :return:
+        | bool: Success or Failure
+        | list: List of type files loaded
 
         :exception individual type items must be unique across all types.xml files.
         """
@@ -43,7 +45,7 @@ class Types:
 
         return True, list_files
 
-    def load_file(self, file: str) -> tuple[bool, str]:
+    def load_types(self, file: str) -> tuple[bool, str]:
 
         errors = []
         xml_doc = etree.parse(file)
@@ -69,3 +71,4 @@ class Types:
         # loop through each of the type in types
         # create a type class
         # add it to the dictionary
+
