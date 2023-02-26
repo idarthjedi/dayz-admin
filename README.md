@@ -7,6 +7,13 @@ Initial Release Date:
 
 A collection of utilities and scripts I've written to help in my DayZ Management
 
+## app/app.py
+
+This will load a GUI to set the directory structure, and upon closing, will validate the DayZ Profile XML Files, and optionally the well-formedness of the JSON and XML files in various directories.
+
+### app-config.json
+
+Delete this file to recreate the config file upon next app.py run.
 
 ## validator.py
 
