@@ -1,6 +1,8 @@
 import os
+import json
 
-from lxml import etree
+import jsonschema.exceptions
+
 from dayz_admin_tools.config import ROOT_DIR
 from jsonschema import validate as json_validate
 from dayz_admin_tools.utilities.files.fManager import FileManager
@@ -15,7 +17,10 @@ class Items(dict):
     def __init__(self):
         # load the XSD file
         with open(ROOT_DIR + "/dayz_admin_tools/utilities/traders/expansion/schemas/items.schema.json", "r") as schema_doc:
-            self._jsonschema = schema_doc.read()
+            self._jsonschema = json.loads(schema_doc.read())
+
+        # self._validatedschema = jsonschema.validators.Draft7Validator(self._jsonschema)
+
         super().__init__()
 
     @staticmethod
@@ -29,3 +34,38 @@ class Items(dict):
         """
 
         return True, FileManager.find_files(root_directory, ".json")
+
+
+    def load_items(self, file: str) -> tuple[bool, list]:
+        """
+        Loads individual items across all market files, will record errors if duplicates are found to already exist.
+        :param file: name of the file to load into the types collection
+        :return: True for no errors, False for errors, and a list of duplicate items
+        """
+        errors = []
+        with open(file, "r") as json_file:
+            json_doc = json.load(json_file)
+
+        try:
+            json_validate(json_doc, self._jsonschema)
+        except Exception as error:
+            errors.append(error.args[0] + f" in file: {file}{os.linesep}")
+            # The document failed Schema Validation, move onto the next document
+            return False, errors
+
+        # JSON turned out to be valid per schema, loop through each of the Items and create an Item object
+        
+#        # xml turned out to be valid per schema, loop through each of the type in types and create an type object
+#        all_types = xml_doc.xpath("//types/type")
+#        for each_type in all_types:
+#            obj_name = each_type.attrib['name']
+#            if obj_name in self:
+#                errors.append(f"Object {obj_name} duplications:{os.linesep}"\
+#                              f"\t{Fore.GREEN}Winner: {self[obj_name].filesource}{os.linesep}"\
+#                              f"\t{Fore.RED}Loser: {file}.")
+#
+#            else:
+#                # Only append if there wasn't a duplicate already
+#                self[obj_name] = Type(obj_name, file)
+#
+        return len(errors) == 0, errors

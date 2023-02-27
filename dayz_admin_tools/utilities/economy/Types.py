@@ -74,10 +74,6 @@ class Types(dict):
 
         return len(errors) == 0, errors
 
-        # loop through each of the type in types
-        # create a type class
-        # add it to the dictionary
-
   #  def types(self) -> Type:
   #      for type_instance in self.values():
   #          yield type_instance

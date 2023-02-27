@@ -1,114 +1,64 @@
 {
-  "$schema": "https://json-schema.org/draft-07/schema",
-  "$id": "http://example.com/example.json",
-  "title": "Root Schema",
   "type": "object",
-  "default": {},
   "properties": {
     "m_Version": {
-      "title": "The m_Version Schema",
-      "type": "number",
-      "default": 0
+      "type": "integer"
     },
     "DisplayName": {
-      "title": "The DisplayName Schema",
       "type": "string"
     },
     "Icon": {
-      "title": "The Icon Schema",
       "type": "string"
     },
     "Color": {
-      "title": "The Color Schema",
       "type": "string"
     },
     "IsExchange": {
-      "title": "The IsExchange Schema",
-      "type": "number",
-      "default": 0
+      "type": "integer"
     },
     "InitStockPercent": {
-      "title": "The InitStockPercent Schema",
-      "type": "number",
-      "default": 0
+      "type": "integer"
     },
     "Items": {
-      "title": "The Items Schema",
       "type": "array",
       "items": {
-        "title": "A Schema",
         "type": "object",
         "properties": {
           "ClassName": {
-            "title": "The ClassName Schema",
             "type": "string"
           },
           "MaxPriceThreshold": {
-            "title": "The MaxPriceThreshold Schema",
-            "type": "number"
+            "type": "integer"
           },
           "MinPriceThreshold": {
-            "title": "The MinPriceThreshold Schema",
-            "type": "number"
+            "type": "integer"
           },
           "SellPricePercent": {
-            "title": "The SellPricePercent Schema",
-            "type": "number",
-            "minimum": -1
+            "type": "integer"
           },
           "MaxStockThreshold": {
-            "title": "The MaxStockThreshold Schema",
-            "type": "number"
+            "type": "integer"
           },
           "MinStockThreshold": {
-            "title": "The MinStockThreshold Schema",
-            "type": "number"
+            "type": "integer"
           },
           "QuantityPercent": {
-            "title": "The QuantityPercent Schema",
-            "type": "number",
-            "minimum": -1,
-            "maximum": 100
+            "type": "integer"
           },
           "SpawnAttachments": {
-            "title": "The SpawnAttachments Schema",
             "type": "array",
-            "uniqueItems": true,
             "items": {
               "type": "string"
             }
           },
           "Variants": {
-            "title": "The Variants Schema",
             "type": "array",
-            "uniqueItems": true,
             "items": {
-              "title": "A Schema",
               "type": "string"
             }
           }
-        },
-        "required": [
-          "ClassName",
-          "MaxPriceThreshold",
-          "MinPriceThreshold",
-          "SellPricePercent",
-          "MaxStockThreshold",
-          "MinStockThreshold",
-          "QuantityPercent",
-          "SpawnAttachments",
-          "Variants"
-        ]
+        }
       }
     }
-  },
-  "required": [
-    "m_Version",
-    "DisplayName",
-    "Icon",
-    "Color",
-    "IsExchange",
-    "InitStockPercent",
-    "Items"
-  ]
+  }
 }
