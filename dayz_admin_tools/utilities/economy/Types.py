@@ -78,6 +78,6 @@ class Types(dict):
         # create a type class
         # add it to the dictionary
 
-    def types(self) -> Type:
-        for type_instance in self.values():
-            yield type_instance
+  #  def types(self) -> Type:
+  #      for type_instance in self.values():
+  #          yield type_instance
