@@ -1,7 +1,9 @@
 {
-  "config-version" : 1.0,
+  "config-version" : 1.1,
   "properties" : {
     "dayz-profile-dir": "",
+    "market-dir": "",
+    "trader-dir": "",
     "other_dirs": {
       "json": [
       ],

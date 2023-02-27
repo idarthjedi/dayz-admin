@@ -89,15 +89,15 @@ class Ui_MainWindow(QMainWindow):
         self.label_5 = QtWidgets.QLabel(parent=self.tab_marketinformation)
         self.label_5.setObjectName("label_5")
         self.gridLayout_4.addWidget(self.label_5, 2, 0, 1, 1)
-        self.lineEdit = QtWidgets.QLineEdit(parent=self.tab_marketinformation)
-        self.lineEdit.setObjectName("lineEdit")
-        self.gridLayout_4.addWidget(self.lineEdit, 1, 0, 1, 1)
+        self.lnMarketDirectory = QtWidgets.QLineEdit(parent=self.tab_marketinformation)
+        self.lnMarketDirectory.setObjectName("lnMarketDirectory")
+        self.gridLayout_4.addWidget(self.lnMarketDirectory, 1, 0, 1, 1)
         self.pushButton_marketdirectory = QtWidgets.QPushButton(parent=self.tab_marketinformation)
         self.pushButton_marketdirectory.setObjectName("pushButton_marketdirectory")
         self.gridLayout_4.addWidget(self.pushButton_marketdirectory, 1, 1, 1, 1)
-        self.lineEdit_2 = QtWidgets.QLineEdit(parent=self.tab_marketinformation)
-        self.lineEdit_2.setObjectName("lineEdit_2")
-        self.gridLayout_4.addWidget(self.lineEdit_2, 3, 0, 1, 1)
+        self.lnTraderDirectory = QtWidgets.QLineEdit(parent=self.tab_marketinformation)
+        self.lnTraderDirectory.setObjectName("lnTraderDirectory")
+        self.gridLayout_4.addWidget(self.lnTraderDirectory, 3, 0, 1, 1)
         self.label_4 = QtWidgets.QLabel(parent=self.tab_marketinformation)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Policy.Preferred, QtWidgets.QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -127,6 +127,8 @@ class Ui_MainWindow(QMainWindow):
         self.retranslateUi(MainWindow)
         # TODO: Added All the Push Button Responses
         self.pushButton_ProfileLocation.clicked['bool'].connect(self._getProfileLocation)  # type: ignore
+        self.pushButton_marketdirectory.clicked['bool'].connect(self._getMarketLocation)  # type: ignore
+        self.pushButton_tradersdirectory.clicked['bool'].connect(self._getTraderLocation)  # type: ignore
         self.pushButton_addJSON.clicked['bool'].connect(self._addJSONLocation)  # type: ignore
         self.pushButton_removeJSON.clicked['bool'].connect(self._removeJSONLocation)  # type: ignore
         self.pushButton_addXML.clicked['bool'].connect(self._addXMLLocation)  # type: ignore
@@ -159,9 +161,12 @@ class Ui_MainWindow(QMainWindow):
 
 
         #TODO: Added All the code down to if __name__=="__main__"
-        profile_dir, json_dir, xml_dir = config.loadConfig()
+        profile_dir, market_dir, trader_dir, json_dir, xml_dir = config.loadConfig()
 
         self.lnProfileLocation.setText(profile_dir)
+        self.lnMarketDirectory.setText(market_dir)
+        self.lnTraderDirectory.setText(trader_dir)
+
         for path in json_dir:
             self.lstJSONLocation.addItem(path)
 
@@ -172,6 +177,23 @@ class Ui_MainWindow(QMainWindow):
 
         return QFileDialog.getExistingDirectory(self, caption=title,
                                                 directory=start_dir)
+
+    def _getMarketLocation(self, status: bool):
+        fileName = self.getDirectory("Locate Expansion Market Directory", self.lnProfileLocation.text())
+        if fileName:
+            self.lnMarketDirectory.setText(fileName)
+        else:
+            self.lnMarketDirectory.setText("")
+        return
+
+    def _getTraderLocation(self, status: bool):
+
+        fileName = self.getDirectory("Locate Expansion Trader Directory", self.lnProfileLocation.text())
+        if fileName:
+            self.lnTraderDirectory.setText(fileName)
+        else:
+            self.lnTraderDirectory.setText("")
+        return
 
     def _getProfileLocation(self, status: bool):
         fileName = self.getDirectory("Locate DayZ Profile Directory", self.lnProfileLocation.text())
@@ -233,6 +255,8 @@ class Ui_MainWindow(QMainWindow):
             xml_items.append(str(self.lstXMLLocation.item(index).text()))
 
         config.saveConfig(self.lnProfileLocation.text(),
+                          self.lnMarketDirectory.text(),
+                          self.lnTraderDirectory.text(),
                           json_items,
                           xml_items)
 
