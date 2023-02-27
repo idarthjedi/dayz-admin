@@ -31,12 +31,12 @@ options:
   -d DIR, --dir DIR     Specify a directory to search for files to validate.Multiple directories can be added using spaces between them
 ```
 
-## loader.py
+## types_loader.py
 
 This utility will load up all types.xml files referenced in your Profiles directory; validate them against an XML schema, and ensure all classes loaded are unique across all files.
 
 ```
-usage: loader.py [-h] [-d DIR]
+usage: types_loader.py [-h] [-d DIR]
 
 Loads all the types.xml from the DayZ profiles directory and validates them against a schema, and ensures there is only one instance of every class in all types.xml files.
 
