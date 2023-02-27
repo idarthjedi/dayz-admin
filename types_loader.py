@@ -43,7 +43,7 @@ def load_profiles(profiles_directory: str) -> tuple[list, list, Types]:
 if __name__ == "__main__":
 
     colorama_init()
-    parser = argparse.ArgumentParser(prog="loader.py",
+    parser = argparse.ArgumentParser(prog="types_loader.py",
                                      description="Loads all the types.xml from the DayZ profiles directory "\
                                                  "and validates them against a schema, and ensures there is "\
                                                  "only one instance of every class in all types.xml files.",
