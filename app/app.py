@@ -1,6 +1,6 @@
 from colorama import Fore, Back, Style, init as colorama_init
 from validator import validate_json, validate_xml
-from loader import load_profiles
+from types_loader import load_profiles
 from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
 from dayz_admin_tools.utilities.economy.Types import Types
 from dayz_admin_tools.utilities.economy.Type import Type
