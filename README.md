@@ -30,7 +30,7 @@ options:
                         Specify whether you want to validate JSON or XML(Default)
   -d DIR, --dir DIR     Specify a directory to search for files to validate.Multiple directories can be added using spaces between them
 ```
-## items_laoder.py
+## items_loader.py
 
 This utility will load up all the Market files in the Markets directory from the Root Profiles directory, it will validate them against a JSON schema, and then ensure all the Items are unique across all the Market files.
 
