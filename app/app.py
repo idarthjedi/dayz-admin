@@ -3,7 +3,7 @@ from validator import validate_json, validate_xml
 from types_loader import load_profiles
 from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
 from dayz_admin_tools.utilities.economy.Types import Types
-from dayz_admin_tools.utilities.economy.Type import Type
+from config import config
 
 import mainConfig
 import sys
@@ -13,6 +13,8 @@ import json
 _profiles_directory = ""
 _json_directory = ""
 _xml_directory = ""
+_market_dir = ""
+_trader_dir = ""
 
 _debug = True
 
@@ -50,6 +52,8 @@ def readconfig():
     global _profiles_directory
     global _json_directory
     global _xml_directory
+    global _market_dir
+    global _trader_dir
 
     if not os.path.exists('config/app-config.json'):
         # view in GUI
@@ -62,14 +66,7 @@ def readconfig():
     MainWindow.show()
     ret = app.exec()
 
-    with open('config/app-config.json') as config_file:
-        try:
-            config = json.load(config_file)
-            _profiles_directory = config["properties"]["dayz-profile-dir"]
-            _json_directory = config["properties"]["other_dirs"]["json"]
-            _xml_directory = config["properties"]["other_dirs"]["xml"]
-        except json.JSONDecodeError as error:
-            print(Fore.RED + f"Cannot validate app-config.json")
+    _profiles_directory, _market_dir, _trader_dir, _json_directory, _xml_directory = config.loadConfig()
 
     return
 

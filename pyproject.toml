@@ -13,6 +13,7 @@ colorama = "^0.4.6"
 lxml = "^4.9.2"
 pyqt6 = "^6.4.2"
 jsonschema = "^4.17.3"
+jsonpath-ng = "^1.5.3"
 
 
 [build-system]

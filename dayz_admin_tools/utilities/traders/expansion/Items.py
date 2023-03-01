@@ -1,13 +1,14 @@
 import os
 import json
-
 import jsonschema.exceptions
 
 from dayz_admin_tools.config import ROOT_DIR
 from jsonschema import validate as json_validate
 from dayz_admin_tools.utilities.files.fManager import FileManager
+from jsonpath_ng import jsonpath
+from jsonpath_ng.ext import parser as json_parser
 
-from dayz_admin_tools.utilities.economy.Type import Type
+from dayz_admin_tools.utilities.traders.expansion.Item import Item
 from colorama import Fore, Back, Style
 
 
@@ -52,6 +53,34 @@ class Items(dict):
             errors.append(error.args[0] + f" in file: {file}{os.linesep}")
             # The document failed Schema Validation, move onto the next document
             return False, errors
+
+        classname_search = json_parser.parse('$..Items..ClassName')
+
+        items_list = classname_search.find(json_doc)
+        if len(items_list) <= 0:
+            errors.append(f"{Fore.RED}{file} contains no Items!")
+            return
+
+        for market_item in items_list:
+            if market_item.value in self:
+                errors.append(f"Object {market_item.value} duplications:{os.linesep}"\
+                              f"\t{Fore.GREEN}Winner: {self[market_item.value].filesource}{os.linesep}"\
+                              f"\t{Fore.RED}Loser: {file}.")
+            else:
+                parent = self[market_item.value] = Item(market_item.value, file)
+                # check for Variants
+                variants_search = json_parser.parse(
+                    f"$.Items[?(@.ClassName=='{market_item.value}')].Variants")
+                variants_list = variants_search.find(json_doc)
+                if len(variants_list[0].value) > 0:
+                    # no variants
+                    for variant in variants_list[0].value:
+                        if variant in self:
+                            errors.append(f"Object {variant} variant listed with duplications:{os.linesep}" \
+                                          f"\t{Fore.GREEN}Winner: {self[variant].filesource}{os.linesep}" \
+                                          f"\t{Fore.RED}Loser: {file}.")
+                        else:
+                            self[variant] = Item(variant, file, parent)
 
         # JSON turned out to be valid per schema, loop through each of the Items and create an Item object
         
