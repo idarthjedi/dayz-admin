@@ -30,7 +30,20 @@ options:
                         Specify whether you want to validate JSON or XML(Default)
   -d DIR, --dir DIR     Specify a directory to search for files to validate.Multiple directories can be added using spaces between them
 ```
+## items_laoder.py
 
+This utility will load up all the Market files in the Markets directory from the Root Profiles directory, it will validate them against a JSON schema, and then ensure all the Items are unique across all the Market files.
+
+```
+usage: items_loader.py [-h] [-d DIR]
+
+Loads all the Market Items JSON files from the Markets directory and validates them against a schema, and ensures there is only one instance of every class in all Market files.
+
+options:
+  -h, --help         show this help message and exit
+  -d DIR, --dir DIR  Specify the Markets directory of Expansion Market folder to search for files to validate.
+
+```
 ## types_loader.py
 
 This utility will load up all types.xml files referenced in your Profiles directory; validate them against an XML schema, and ensure all classes loaded are unique across all files.
