@@ -38,7 +38,7 @@ def main(primary_search_fragment: str, market_search_file: str, primary_search_s
     # remove variants
     # items_list[0].value['Variants'].clear()
 
-    # load up the diesel backpack file from market
+    # load up the provided file from market
     with open(os.path.join(market_directory, f"{market_search_file}")) as market_file:
         market_data = json.load(market_file)
 
