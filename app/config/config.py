@@ -3,14 +3,19 @@ import os
 
 
 def loadConfig() -> tuple[str, list, list, list, list]:
+    """
+
+    :return: profile_directory, market_directory, trader_directory, json_directory, xml_directory
+    """
+    cur_dir = os.path.realpath(os.path.join(os.path.dirname(__file__)))
     # Load config file if it exists
-    if not os.path.exists("config/app-config.json"):
-        with open("config/src/app-config.latest.json", "r") as src:
-            with open("config/app-config.json", "w") as dest:
+    if not os.path.exists(f"{cur_dir}/app-config.json"):
+        with open(f"{cur_dir}/src/app-config.latest.json", "r") as src:
+            with open(f"{cur_dir}/app-config.json", "w") as dest:
                 dest.write(src.read())
 
-    if os.path.exists("config/app-config.json"):
-        with open('config/app-config.json') as config_file:
+    if os.path.exists(f"{cur_dir}/app-config.json"):
+        with open(f'{cur_dir}/app-config.json') as config_file:
             try:
                 config = json.load(config_file)
                 _config_version = float(config["config-version"])
@@ -32,6 +37,9 @@ def loadConfig() -> tuple[str, list, list, list, list]:
 
 def saveConfig(profileDir: str, market_dir: str, traders_dir: str, json_items: [], xml_items: []) -> bool:
 
+
+    cur_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+
     data = {"config-version": 1.1}
     properties = {"dayz-profile-dir": profileDir,
                   "market-dir": market_dir,
@@ -45,7 +53,7 @@ def saveConfig(profileDir: str, market_dir: str, traders_dir: str, json_items: [
     properties["other_dirs"] = other_dirs
     data["properties"] = properties
 
-    with open("config/app-config.json", mode="w") as config_file:
+    with open(f"{cur_dir}/app-config.json", mode="w") as config_file:
         config_file.write(json.dumps(data))
 
     return True
