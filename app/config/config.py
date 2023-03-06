@@ -38,7 +38,7 @@ def loadConfig() -> tuple[str, list, list, list, list]:
 def saveConfig(profileDir: str, market_dir: str, traders_dir: str, json_items: [], xml_items: []) -> bool:
 
 
-    cur_dir = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+    cur_dir = os.path.realpath(os.path.join(os.path.dirname(__file__)))
 
     data = {"config-version": 1.1}
     properties = {"dayz-profile-dir": profileDir,
