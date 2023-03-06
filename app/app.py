@@ -55,10 +55,6 @@ def readconfig():
     global _market_dir
     global _trader_dir
 
-    if not os.path.exists('config/app-config.json'):
-        # view in GUI
-        pass
-
     app = QApplication(sys.argv)
     MainWindow = QMainWindow()
     ui = mainConfig.Ui_MainWindow()
