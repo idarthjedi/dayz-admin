@@ -2,30 +2,30 @@ from app.config import config
 import json
 from jsonpath_ng import jsonpath
 from jsonpath_ng.ext import parser as json_parser
+from dayz_admin_tools.utilities.files.fManager import FileManager
 
 import os
+import sys
+import argparse
 
 
-def main(primary_search_fragment: str, market_search_file: str, primary_search_section: str):
+def main(expansion_config_dir: str, primary_search_fragment: str, market_search_file: str, primary_search_section: str):
     """
     This function searches through
+    :param expansion_config_dir: The main directory of the expansion mod
     :param primary_search_fragment: The fragment to search for in the airdrop settings and the associated market file
     :param market_search_file: The Market file to search
     :param primary_search_section: The section of the Airdrop file to search
     :return:
     """
-    profile_directory, market_directory, trader_directory, json_directory, xml_directory = config.loadConfig()
 
-    # cheating right now, b/c I'm lazy...
-    expansion_config_dir = os.path.commonprefix([market_directory, trader_directory])
+    market_directory = os.path.join(expansion_config_dir, "Market")
+
+    FileManager.backup(os.path.join(expansion_config_dir, "Settings", "AirdropSettings.json"))
 
     # load airdropsettings file
     with open(os.path.join(expansion_config_dir, "Settings", "AirdropSettings.json"), "r") as airdropsettings_file:
         airdrop_data = json.load(airdropsettings_file)
-
-    with open(os.path.join(expansion_config_dir, "Settings", "AirdropSettings.bak.json"), "w") as airdropsettings_file:
-       json.dump(airdrop_data, airdropsettings_file, indent=2)
-
 
     classname_search = \
         json_parser.parse(f"$..Containers[?(@.Container == '{primary_search_section}')]" \
@@ -71,19 +71,69 @@ def main(primary_search_fragment: str, market_search_file: str, primary_search_s
 
 
 if __name__ == "__main__":
-    main("Diesel_TortillaBag", "joe_dfal_backpacks.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_DFAL", "joe_dfal.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_DFALZ", "joe_dfal.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_TacticalGloves", "joe_clothes.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_Suppressor", "joe_dfal_supp.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_HuntingOptic", "joe_dfal_opt.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_AttackVestPouches", "joe_clothes.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_GorkaJacket", "joe_clothes.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_GorkaPants", "joe_clothes.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_HikingLow", "joe_clothes.json", "ExpansionAirdropContainer_Military")
 
-    main("Diesel_GhillieAtt", "joe_ghillies.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_GhillieHood", "joe_ghillies.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_Ghillie_Mossy", "joe_ghillies.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_Ghillie_Armband", "joe_ghillies.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_WarriorHelmet", "joe_clothes.json", "ExpansionAirdropContainer_Military")
+    section = "ExpansionAirdropContainer"
+
+    parser = argparse.ArgumentParser(prog="airdrop_loader.py",
+                                     description="Searches for objects in a specified market file, "\
+                                     "adds those objects and all their variants to the airdropsettings, "\
+                                     "given each variant equal spawn chances.",
+                                     )
+    parser.add_argument("-d", "--dir",
+                        dest="dir",
+                        help="Specify the root Expansion configuration directory to search for files to update.",
+                        action="store")
+
+    parser.add_argument("-i", "--item",
+                        dest="item",
+                        help="Specify the fragment of the item to search for, e.g. Diesel_TortillaBag",
+                        action="store")
+
+    parser.add_argument("-f", "--file",
+                        dest="file",
+                        help="Specify the specific Market file to examine",
+                        action="store")
+
+    parser.add_argument("-s", "--section",
+                        dest="section",
+                        choices=['d', 'default', 'm', 'medical', 'b', 'basebuilding', 'm', 'military'], default='d',
+                        help="Identifies the section of the airdrop settings file",
+                        action="store"
+                        )
+
+    if len(sys.argv) < 9:
+        parser.print_help()
+        exit()
+
+    args = parser.parse_args()
+
+    match args.section.lower():
+        case "d" | "default":
+            pass
+        case "m" | "medical":
+            section =+ "_Medical"
+        case "b" | "basebuilding":
+            section += "_Basebuilding"
+        case "m" | "military":
+            section += "_Military"
+        case _:
+            pass
+
+    main(args.dir, args.item, args.file, section)
+#    main(args.dir, "Diesel_TortillaBag", "joe_dfal_backpacks.json", section)
+#    main(args.dir, "Diesel_DFAL", "joe_dfal.json", section)
+#    main(args.dir, "Diesel_DFALZ", "joe_dfal.json", section)
+#    main(args.dir, "Diesel_TacticalGloves", "joe_clothes.json", section)
+#    main(args.dir, "Diesel_Suppressor", "joe_dfal_supp.json", section)
+#    main(args.dir, "Diesel_HuntingOptic", "joe_dfal_opt.json", section)
+#    main(args.dir, "Diesel_AttackVestPouches", "joe_clothes.json", section)
+#    main(args.dir, "Diesel_GorkaJacket", "joe_clothes.json", section)
+#    main(args.dir, "Diesel_GorkaPants", "joe_clothes.json", section)
+#    main(args.dir, "Diesel_HikingLow", "joe_clothes.json", section)
+#
+#    main(args.dir, "Diesel_GhillieAtt", "joe_ghillies.json", section)
+#    main(args.dir, "Diesel_GhillieHood", "joe_ghillies.json", section)
+#    main(args.dir, "Diesel_Ghillie_Mossy", "joe_ghillies.json", section)
+#    main(args.dir, "Diesel_Ghillie_Armband", "joe_ghillies.json", section)
+#    main(args.dir, "Diesel_WarriorHelmet", "joe_clothes.json", section)
+#
