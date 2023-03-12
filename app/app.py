@@ -1,14 +1,12 @@
-from colorama import Fore, Back, Style, init as colorama_init
-from validator import validate_json, validate_xml
-from types_loader import load_profiles
-from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
+from colorama import Fore, init as colorama_init
+from standalone.validator import validate_json, validate_xml
+from standalone.types_loader import load_profiles
+from PyQt6.QtWidgets import QApplication, QMainWindow
 from dayz_admin_tools.utilities.economy.Types import Types
 from config import config
 
 import mainConfig
 import sys
-import os
-import json
 
 _profiles_directory = ""
 _json_directory = ""
