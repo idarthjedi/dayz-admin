@@ -73,7 +73,3 @@ class Types(dict):
                 self[obj_name] = Type(obj_name, file)
 
         return len(errors) == 0, errors
-
-  #  def types(self) -> Type:
-  #      for type_instance in self.values():
-  #          yield type_instance
