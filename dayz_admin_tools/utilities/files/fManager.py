@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
+
 import os
+import shutil
 
 
 class FileManager(ABC):
@@ -10,6 +13,15 @@ class FileManager(ABC):
         Creates a copy of the File Manager
         """
         pass
+
+    @staticmethod
+    def backup(fullpath_filename: str) -> bool:
+        uniqueness_name = datetime.now().strftime("%Y-%m-%d-%H.%M.%S")
+        file_parts = os.path.splitext(fullpath_filename)
+        new_filename = f"{file_parts[0]}-BACKUP.{uniqueness_name}.{file_parts[1]}"
+
+        shutil.copy(fullpath_filename, new_filename)
+
 
     @staticmethod
     @abstractmethod
