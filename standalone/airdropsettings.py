@@ -8,7 +8,7 @@ import os
 
 def main(primary_search_fragment: str, market_search_file: str, primary_search_section: str):
     """
-
+    This function searches through
     :param primary_search_fragment: The fragment to search for in the airdrop settings and the associated market file
     :param market_search_file: The Market file to search
     :param primary_search_section: The section of the Airdrop file to search
@@ -66,15 +66,15 @@ def main(primary_search_fragment: str, market_search_file: str, primary_search_s
     drop_list[0].value['Name'] = objs[0]
     drop_list[0].value['Variants'] = variants
 
-
     with open(os.path.join(expansion_config_dir, "Settings", "AirdropSettings.json"), "w") as airdropsettings_file:
         json.dump(airdrop_data, airdropsettings_file, indent=2)
 
+
 if __name__ == "__main__":
-    main("Diesel_TortillaBag", "Backpacks.json", "ExpansionAirdropContainer_Military")
+    main("Diesel_TortillaBag", "joe_dfal_backpacks.json", "ExpansionAirdropContainer_Military")
     main("Diesel_DFAL", "joe_dfal.json", "ExpansionAirdropContainer_Military")
     main("Diesel_DFALZ", "joe_dfal.json", "ExpansionAirdropContainer_Military")
-    main("Diesel_TracticalGloves", "joe_clothes.json", "ExpansionAirdropContainer_Military")
+    main("Diesel_TacticalGloves", "joe_clothes.json", "ExpansionAirdropContainer_Military")
     main("Diesel_Suppressor", "joe_dfal_supp.json", "ExpansionAirdropContainer_Military")
     main("Diesel_HuntingOptic", "joe_dfal_opt.json", "ExpansionAirdropContainer_Military")
     main("Diesel_AttackVestPouches", "joe_clothes.json", "ExpansionAirdropContainer_Military")
@@ -82,4 +82,8 @@ if __name__ == "__main__":
     main("Diesel_GorkaPants", "joe_clothes.json", "ExpansionAirdropContainer_Military")
     main("Diesel_HikingLow", "joe_clothes.json", "ExpansionAirdropContainer_Military")
 
-
+    main("Diesel_GhillieAtt", "joe_ghillies.json", "ExpansionAirdropContainer_Military")
+    main("Diesel_GhillieHood", "joe_ghillies.json", "ExpansionAirdropContainer_Military")
+    main("Diesel_Ghillie_Mossy", "joe_ghillies.json", "ExpansionAirdropContainer_Military")
+    main("Diesel_Ghillie_Armband", "joe_ghillies.json", "ExpansionAirdropContainer_Military")
+    main("Diesel_WarriorHelmet", "joe_clothes.json", "ExpansionAirdropContainer_Military")
