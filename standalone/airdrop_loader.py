@@ -120,6 +120,7 @@ if __name__ == "__main__":
             pass
 
     main(args.dir, args.item, args.file, section)
+#    example calls:
 #    main(args.dir, "Diesel_TortillaBag", "joe_dfal_backpacks.json", section)
 #    main(args.dir, "Diesel_DFAL", "joe_dfal.json", section)
 #    main(args.dir, "Diesel_DFALZ", "joe_dfal.json", section)
