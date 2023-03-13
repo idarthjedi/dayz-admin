@@ -57,3 +57,20 @@ options:
   -h, --help         show this help message and exit
   -d DIR, --dir DIR  Specify the root Profiles directory of DayZ to search for files to validate.
 ```
+
+## airdrop_loader.py
+
+```
+usage: airdrop_loader.py [-h] [-d DIR] [-i ITEM] [-f FILE] [-s {d,default,m,medical,b,basebuilding,m,military}]
+
+Searches for objects in a specified market file, adds those objects and all their variants to the airdropsettings, given each variant equal spawn chances.
+
+options:
+  -h, --help            show this help message and exit
+  -d DIR, --dir DIR     Specify the root Expansion configuration directory to search for files to update.
+  -i ITEM, --item ITEM  Specify the fragment of the item to search for, e.g. Diesel_TortillaBag
+  -f FILE, --file FILE  Specify the specific Market file to examine
+  -s {d,default,m,medical,b,basebuilding,m,military}, --section {d,default,m,medical,b,basebuilding,m,military}
+                        Identifies the section of the airdrop settings file
+
+```
