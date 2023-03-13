@@ -15,7 +15,7 @@ This will load a GUI to set the directory structure, and upon closing, will vali
 
 Delete this file to recreate the config file upon next app.py run.
 
-## validator.py
+## standalone/validator.py
 
 This will load up and validate that your JSON and XML files are well-formed.  No more accidental commas!  
 
@@ -30,7 +30,7 @@ options:
                         Specify whether you want to validate JSON or XML(Default)
   -d DIR, --dir DIR     Specify a directory to search for files to validate.Multiple directories can be added using spaces between them
 ```
-## items_loader.py
+## standalone/items_loader.py
 
 This utility will load up all the Market files in the Markets directory from the Root Profiles directory, it will validate them against a JSON schema, and then ensure all the Items are unique across all the Market files.
 
@@ -44,7 +44,7 @@ options:
   -d DIR, --dir DIR  Specify the Markets directory of Expansion Market folder to search for files to validate.
 
 ```
-## types_loader.py
+## standalone/types_loader.py
 
 This utility will load up all types.xml files referenced in your Profiles directory; validate them against an XML schema, and ensure all classes loaded are unique across all files.
 
@@ -58,7 +58,7 @@ options:
   -d DIR, --dir DIR  Specify the root Profiles directory of DayZ to search for files to validate.
 ```
 
-## airdrop_loader.py
+## standalone/airdrop_loader.py
 
 ```
 usage: airdrop_loader.py [-h] [-d DIR] [-i ITEM] [-f FILE] [-s {d,default,m,medical,b,basebuilding,m,military}]
