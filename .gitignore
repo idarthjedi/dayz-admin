@@ -135,4 +135,4 @@ dmypy.json
 .idea/
 
 # App specific details
-app/config/app-config.json
+src/config/app-config.json

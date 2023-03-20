@@ -1,4 +1,4 @@
-from app.config import config
+from src.config import config
 import json
 from jsonpath_ng import jsonpath
 from jsonpath_ng.ext import parser as json_parser

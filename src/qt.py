@@ -3,9 +3,10 @@ from standalone.validator import validate_json, validate_xml
 from standalone.types_loader import load_profiles
 from PyQt6.QtWidgets import QApplication, QMainWindow
 from dayz_admin_tools.utilities.economy.Types import Types
-from config import config
 
-import mainConfig
+from src.config import config
+from src.forms import mainConfig
+
 import sys
 
 _profiles_directory = ""
