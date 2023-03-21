@@ -6,17 +6,17 @@ Initial Release Date:
     02/2023
 
 A collection of utilities and scripts I've written to help in my DayZ Management
-## app/main.py
+## src/main.py
 
 This loads the main application (WIP) that brings a GUI interface to all the different utilities written within this toolset.
 
-## app/qt.py (quicktest)
+## src/qt.py (quicktest)
 
 This will load a GUI to set the directory structure, and upon closing, will validate the DayZ Profile XML Files, and optionally the well-formedness of the JSON and XML files in various directories.
 
-### app-config.json
+### src/config/app-config.json
 
-Delete this file to recreate the config file upon next app.py run.
+This file is created the first time the application requests configuration information and stored locally.  Delete this file to recreate the config file upon next config run.
 
 ## standalone/validator.py
 
