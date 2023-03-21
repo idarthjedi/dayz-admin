@@ -6,8 +6,11 @@ Initial Release Date:
     02/2023
 
 A collection of utilities and scripts I've written to help in my DayZ Management
+## app/main.py
 
-## app/app.py
+This loads the main application (WIP) that brings a GUI interface to all the different utilities written within this toolset.
+
+## app/qt.py (quicktest)
 
 This will load a GUI to set the directory structure, and upon closing, will validate the DayZ Profile XML Files, and optionally the well-formedness of the JSON and XML files in various directories.
 
