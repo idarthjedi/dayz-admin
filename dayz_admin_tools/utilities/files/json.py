@@ -13,7 +13,7 @@ class JSONManager(FileManager):
         """
 
         :param filepath: location of the directories & subdirectories to search for JSON files
-        :return: Tuple (SUCCESS_STATUS, FAILED_FILES)
+        :return: Tuple (SUCCESS_STATUS, TOTAL_FILES, FAILED_FILES)
         """
 
         validated = True
