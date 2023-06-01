@@ -55,10 +55,10 @@ def readconfig():
     global _trader_dir
 
     app = QApplication(sys.argv)
-    MainWindow = QMainWindow()
-    ui = mainConfig.Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    ConfigWindow = QMainWindow()
+    ui = mainConfig.Ui_ConfigWindow()
+    ui.setupUi(ConfigWindow)
+    ConfigWindow.show()
     ret = app.exec()
 
     _profiles_directory, _market_dir, _trader_dir, _json_directory, _xml_directory = config.loadConfig()
