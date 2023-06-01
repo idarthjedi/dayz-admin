@@ -10,9 +10,13 @@ A collection of utilities and scripts I've written to help in my DayZ Management
 
 This loads the main application (WIP) that brings a GUI interface to all the different utilities written within this toolset.
 
-## src/qt.py (quicktest)
+![image_mainUI.jpg](src%2Fconfig%2Fresources%2Fimage_mainUI.jpg)
+
+## src/validatorUI.py (Validator quicktest)
 
 This will load a GUI to set the directory structure, and upon closing, will validate the DayZ Profile XML Files, and optionally the well-formedness of the JSON and XML files in various directories.
+
+![image_configUI.jpg](src%2Fconfig%2Fresources%2Fimage_configUI.jpg)
 
 ### src/config/app-config.json
 
