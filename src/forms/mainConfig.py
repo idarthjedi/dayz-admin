@@ -15,14 +15,14 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QFileDialog, QWidget, QMessageBox, QMainWindow
 
 
-#TODO: Changed parent window to QMainWindow from object
-class Ui_MainWindow(QMainWindow):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(724, 561)
+#TODO: Changed parent window to QConfigWindow from object
+class Ui_ConfigWindow(QMainWindow):
+    def setupUi(self, ConfigWindow):
+        ConfigWindow.setObjectName("ConfigWindow")
+        ConfigWindow.resize(724, 561)
         #TODO: Added this next line
-        self._parent = MainWindow
-        self.centralwidget = QtWidgets.QWidget(parent=MainWindow)
+        self._parent = ConfigWindow
+        self.centralwidget = QtWidgets.QWidget(parent=ConfigWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout_2 = QtWidgets.QGridLayout(self.centralwidget)
         self.gridLayout_2.setObjectName("gridLayout_2")
@@ -117,16 +117,16 @@ class Ui_MainWindow(QMainWindow):
         self.pushButton_Close = QtWidgets.QPushButton(parent=self.centralwidget)
         self.pushButton_Close.setObjectName("pushButton_Close")
         self.gridLayout_2.addWidget(self.pushButton_Close, 1, 0, 1, 1)
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(parent=MainWindow)
+        ConfigWindow.setCentralWidget(self.centralwidget)
+        self.menubar = QtWidgets.QMenuBar(parent=ConfigWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 724, 24))
         self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(parent=MainWindow)
+        ConfigWindow.setMenuBar(self.menubar)
+        self.statusbar = QtWidgets.QStatusBar(parent=ConfigWindow)
         self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        ConfigWindow.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
+        self.retranslateUi(ConfigWindow)
         # TODO: Added All the Push Button Responses
         self.pushButton_ProfileLocation.clicked['bool'].connect(self._getProfileLocation)  # type: ignore
         self.pushButton_marketdirectory.clicked['bool'].connect(self._getMarketLocation)  # type: ignore
@@ -138,27 +138,27 @@ class Ui_MainWindow(QMainWindow):
         self.pushButton_Close.clicked['bool'].connect(self._closeform)  # type: ignore
 
         self.tabWidget.setCurrentIndex(0)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        QtCore.QMetaObject.connectSlotsByName(ConfigWindow)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, ConfigWindow):
         _translate = QtCore.QCoreApplication.translate
         # TODO: Changed Name of Main Window
-        MainWindow.setWindowTitle(_translate("MainWindow", "DayZ Admin Tools Config Editor"))
-        self.pushButton_addJSON.setText(_translate("MainWindow", "+"))
-        self.label.setText(_translate("MainWindow", "DayZ Profile Location"))
-        self.label_2.setText(_translate("MainWindow", "DayZ JSON File Location(s)"))
-        self.label_3.setText(_translate("MainWindow", "DayZ XML File Location(s)"))
-        self.pushButton_ProfileLocation.setText(_translate("MainWindow", "..."))
-        self.pushButton_removeXML.setText(_translate("MainWindow", "-"))
-        self.pushButton_addXML.setText(_translate("MainWindow", "+"))
-        self.pushButton_removeJSON.setText(_translate("MainWindow", "-"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_directoryconfig), _translate("MainWindow", "Core Directory Info"))
-        self.pushButton_tradersdirectory.setText(_translate("MainWindow", "..."))
-        self.label_5.setText(_translate("MainWindow", "Traders Directory"))
-        self.pushButton_marketdirectory.setText(_translate("MainWindow", "..."))
-        self.label_4.setText(_translate("MainWindow", "Market Directory"))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_marketinformation), _translate("MainWindow", "Market Information"))
-        self.pushButton_Close.setText(_translate("MainWindow", "&Close"))
+        ConfigWindow.setWindowTitle(_translate("MainWindow", "DayZ Admin Tools Config Editor"))
+        self.pushButton_addJSON.setText(_translate("ConfigWindow", "+"))
+        self.label.setText(_translate("ConfigWindow", "DayZ Profile Location"))
+        self.label_2.setText(_translate("ConfigWindow", "DayZ JSON File Location(s)"))
+        self.label_3.setText(_translate("ConfigWindow", "DayZ XML File Location(s)"))
+        self.pushButton_ProfileLocation.setText(_translate("ConfigWindow", "..."))
+        self.pushButton_removeXML.setText(_translate("ConfigWindow", "-"))
+        self.pushButton_addXML.setText(_translate("ConfigWindow", "+"))
+        self.pushButton_removeJSON.setText(_translate("ConfigWindow", "-"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_directoryconfig), _translate("ConfigWindow", "Core Directory Info"))
+        self.pushButton_tradersdirectory.setText(_translate("ConfigWindow", "..."))
+        self.label_5.setText(_translate("ConfigWindow", "Traders Directory"))
+        self.pushButton_marketdirectory.setText(_translate("ConfigWindow", "..."))
+        self.label_4.setText(_translate("ConfigWindow", "Market Directory"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_marketinformation), _translate("ConfigWindow", "Market Information"))
+        self.pushButton_Close.setText(_translate("ConfigWindow", "&Close"))
 
 
 
@@ -266,8 +266,8 @@ class Ui_MainWindow(QMainWindow):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    ConfigWindow = QtWidgets.QMainWindow()
+    ui = Ui_ConfigWindow()
+    ui.setupUi(ConfigWindow)
+    ConfigWindow.show()
     sys.exit(app.exec())

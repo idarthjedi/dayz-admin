@@ -1,6 +1,10 @@
 import json
 import os
-
+import sys
+from PyQt6.QtWidgets import QApplication, QMainWindow
+from PyQt6.QtCore import QCoreApplication
+from src.config import config
+from src.forms import mainConfig
 
 def loadConfig() -> tuple[str, list, list, list, list]:
     """
@@ -34,9 +38,7 @@ def loadConfig() -> tuple[str, list, list, list, list]:
     #TODO: Should change this into a dict object, before it grows too large!
     return _profiles_directory, _market_directory, _trader_directory, _json_directory, _xml_directory
 
-
 def saveConfig(profileDir: str, market_dir: str, traders_dir: str, json_items: [], xml_items: []) -> bool:
-
 
     cur_dir = os.path.realpath(os.path.join(os.path.dirname(__file__)))
 
@@ -57,3 +59,18 @@ def saveConfig(profileDir: str, market_dir: str, traders_dir: str, json_items: [
         config_file.write(json.dumps(data))
 
     return True
+
+
+def setconfig() -> bool:
+    app = QCoreApplication.instance()
+    if app is not None:
+        ui = mainConfig.Ui_MainWindow()
+        ui.show()
+    else:
+        app = QApplication(sys.argv)
+        MainWindow = QMainWindow()
+        ui = mainConfig.Ui_MainWindow()
+        ui.setupUi(MainWindow)
+        MainWindow.show()
+        ret = app.exec()
+

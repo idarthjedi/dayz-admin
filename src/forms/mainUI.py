@@ -8,6 +8,7 @@
 import os
 from src.config import config
 from pathlib import Path
+from src.forms import mainConfig
 
 from dayz_admin_tools.utilities.economy.Types import Types
 from dayz_admin_tools.utilities.traders.expansion.Items import Items
@@ -27,8 +28,14 @@ class Ui_MainWindow(QMainWindow):
         self._trader_dir = None
         self._json_directory = None
         self._xml_directory = None
+        self._configWindow = mainConfig.Ui_ConfigWindow()
+
 
     def setupUi(self, MainWindow):
+
+        # call configWindow setupUI
+
+        self._configWindow.setupUi(self._configWindow)
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1076, 813)
         #TODO: Added this next line
@@ -360,7 +367,8 @@ class Ui_MainWindow(QMainWindow):
         self._load_marketfiles()
 
     def _loadconfig(self):
-        config.setconfig()
+        #config.setconfig()
+        self._configWindow.show()
         self._profiles_directory, self._market_dir, self._trader_dir, self._json_directory, self._xml_directory = config.loadConfig()
 
     def _load_marketfiles(self):
