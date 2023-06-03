@@ -38,3 +38,18 @@ class Item:
     @variants.setter
     def variants(self, variants: list[type[Item]]):
         self._variants = variants
+
+    @staticmethod
+    def create_new(classname: str):
+
+        return {
+            "ClassName": classname,
+            "MaxPriceThreshold": 0,
+            "MinPriceThreshold": 0,
+            "SellPricePercent": -1.0,
+            "MaxStockThreshold": 1,
+            "MinStockThreshold": 1,
+            "QuantityPercent": -1,
+            "SpawnAttachments": [],
+            "Variants": []
+        }

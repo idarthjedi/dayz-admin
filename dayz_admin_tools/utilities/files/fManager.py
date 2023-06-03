@@ -3,6 +3,7 @@ from datetime import datetime
 
 import os
 import shutil
+from typing import Any, Tuple
 
 
 class FileManager(ABC):
@@ -22,6 +23,17 @@ class FileManager(ABC):
 
         shutil.copy(fullpath_filename, new_filename)
 
+    @staticmethod
+    def return_filename(fullpath_filename: str, split_extension: bool = False) -> tuple:
+
+        if not split_extension:
+            return os.path.basename(fullpath_filename)
+        else:
+            return os.path.splitext(fullpath_filename)
+
+    @staticmethod
+    def return_dirname(fullpath_filename: str) -> str:
+        return os.path.dirname(fullpath_filename)
 
     @staticmethod
     @abstractmethod
