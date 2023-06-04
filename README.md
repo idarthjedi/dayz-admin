@@ -81,7 +81,21 @@ options:
                         Identifies the section of the airdrop settings file
 
 ```
+## standalone/trader_to_expansion.py
 
+```
+usage: traderplus_to_expansion.py [-h] -f FILE [-m MULTIPLIER]
+
+Takes as input the name of a traderplus file, and will output an Expansion trader file of the same name with category extensions (e.g.) FILE=geb_trader, output=geb_trader_fish.json, geb_trader_fishmeat.json, etc. Code
+optionally takes a multiplier (float) to apply against the priceses listed in the traderplus file e.g. 1.5 multiper will make the prices 1.5 times higher than in the original traderplus file.
+
+options:
+  -h, --help            show this help message and exit
+  -f FILE, --file FILE  Specify the TraderPlus file name to convert.
+  -m MULTIPLIER, --multiplier MULTIPLIER
+                        Specify the optional price multiplier for the TraderPlus to Expansion conversion
+
+```
 ## Attribution
 
 Some icons by [Yusuke Kamiyamane](http://p.yusukekamiyamane.com/). Licensed under a [Creative Commons Attribution 3.0 License](http://creativecommons.org/licenses/by/3.0/).
