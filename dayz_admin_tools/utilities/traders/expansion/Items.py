@@ -13,14 +13,11 @@ from colorama import Fore, Back, Style
 
 
 class Items(dict):
-    # _types = {}
 
     def __init__(self):
         # load the XSD file
         with open(ROOT_DIR + "/dayz_admin_tools/utilities/traders/expansion/schemas/items.schema.json", "r") as schema_doc:
             self._jsonschema = json.loads(schema_doc.read())
-
-        # self._validatedschema = jsonschema.validators.Draft7Validator(self._jsonschema)
 
         super().__init__()
 
@@ -35,7 +32,6 @@ class Items(dict):
         """
 
         return True, FileManager.find_files(root_directory, ".json")
-
 
     def load_items(self, file: str) -> tuple[bool, list]:
         """
@@ -98,3 +94,16 @@ class Items(dict):
 #                self[obj_name] = Type(obj_name, file)
 #
         return len(errors) == 0, errors
+
+    @staticmethod
+    def file_header() -> dict:
+
+        return {
+            "m_Version": 12,
+            "DisplayName": "",
+            "Icon": "Deliver",
+            "Color": "FBFCFEFF",
+            "IsExchange": 0,
+            "InitStockPercent": 25.0,
+            "Items": []
+        }

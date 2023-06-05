@@ -1,9 +1,14 @@
 import json
 import math
 import os
+
+import dayz_admin_tools.utilities.traders.expansion.Items
 from dayz_admin_tools.config import _DEBUG
 
 from dayz_admin_tools.utilities.traders.expansion.Item import Item as market_item
+from dayz_admin_tools.utilities.traders.traderplus.Items import Items as trader_items
+
+
 from colorama import Fore, Back, Style, init as colorama_init
 from dayz_admin_tools.utilities.files.fManager import FileManager
 import argparse
@@ -13,49 +18,20 @@ import re
 
 def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
 
-    market_file = {
-        "m_Version": 12,
-        "DisplayName": "",
-        "Icon": "Deliver",
-        "Color": "FBFCFEFF",
-        "IsExchange": 0,
-        "InitStockPercent": 75.0,
-        "Items": []
-    }
+    trader_items_object = trader_items(filename)
+    market_file = dayz_admin_tools.utilities.traders.expansion.Items.Items.file_header()
 
     market_collection = market_file["Items"]
     input_filename = FileManager.return_filename(filename, True)
     dir_basename = FileManager.return_dirname(filename)
     # set up the regular expression to search for <VALUES>
-    pattern = ".*?<(.*?)>"
-    regex = re.compile(pattern, re.MULTILINE | re.DOTALL)
 
     new_lines = []
     # right now there is an assumption that the traderplus file is correctly formatted
     with open(filename) as tp_file:
-        current_category = ""
-        tp_clean_data = tp_file.readlines()
+        new_lines = trader_items_object.clean_file(tp_file.readlines())
 
-        for line in tp_clean_data:
-            # remove all the \t and \n from the start/end
-            line = _strip_codes(line)
-            # if line has any <XYZ> that is not category (e.g. <CurrencyTrader>, <Currency>, <Trader>, etc. - skip it.
-            result = regex.match(line)
-            if result is not None:
-                if result.group(0) != "<Category>":
-                    # Some type of object identifier that is not a category
-                    continue
-                else:
-                    # Set category name
-                    line = _remove_comments(line)
-                    line = _remove_notes(line)
-                    new_lines.append(line)
-            else:
-                if line != "":
-                    line = _remove_comments(line)
-                    line = _remove_notes(line)
-                    new_lines.append(line)
-
+    # right now there is an assumption that the traderplus file is correctly formatted
     tp_data = '\n'.join(new_lines)
 
     tp_categories = tp_data.split("<Category>")
@@ -130,39 +106,6 @@ def _safe_filename(source: str) -> str:
         source = source.replace(char, '_')
 
     return source
-
-
-def _remove_notes(string):
-    pattern = r"(<<.*>>)"
-    regex = re.compile(pattern, re.MULTILINE | re.DOTALL)
-
-    def _replacer(match):
-        if match.group(1) is not None:
-            return ""
-
-    return regex.sub(_replacer, string)
-
-
-def _remove_comments(string):
-    """
-    Code taken from: https://stackoverflow.com/questions/2319019/using-regex-to-remove-comments-from-source-files
-
-    :param string:
-    :return:
-    """
-    pattern = r"(\".*?\"|\'.*?\')|(/\*.*?\*/|//[^\r\n]*$)"
-    # first group captures quoted strings (double or single)
-    # second group captures comments (//single-line or /* multi-line */)
-    regex = re.compile(pattern, re.MULTILINE|re.DOTALL)
-
-    def _replacer(match):
-        # if the 2nd group (capturing comments) is not None,
-        # it means we have captured a non-quoted (real) comment string.
-        if match.group(2) is not None:
-            return "" # so we will return empty to remove the comment
-        else: # otherwise, we will return the 1st group
-            return match.group(1) # captured quoted-string
-    return regex.sub(_replacer, string)
 
 
 if __name__ == "__main__":
