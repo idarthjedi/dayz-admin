@@ -38,7 +38,7 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
 
         for line in tp_clean_data:
             # remove all the \t and \n from the start/end
-            line = strip_codes(line)
+            line = _strip_codes(line)
             # if line has any <XYZ> that is not category (e.g. <CurrencyTrader>, <Currency>, <Trader>, etc. - skip it.
             result = regex.match(line)
             if result is not None:
@@ -47,13 +47,13 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
                     continue
                 else:
                     # Set category name
-                    line = remove_comments(line)
-                    line = remove_notes(line)
+                    line = _remove_comments(line)
+                    line = _remove_notes(line)
                     new_lines.append(line)
             else:
                 if line != "":
-                    line = remove_comments(line)
-                    line = remove_notes(line)
+                    line = _remove_comments(line)
+                    line = _remove_notes(line)
                     new_lines.append(line)
 
     tp_data = '\n'.join(new_lines)
@@ -71,8 +71,8 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
             # strip comments if they exist
             category = items_list.pop(0)
 
-            category = strip_codes(category).replace("/", "_") # some categories are Value_1/Value_2 which breaks filenames
-            category = strip_codes(category).replace(",", "_") # some categories are Value_1,Value_2 which breaks filenames
+            category = _strip_codes(category)
+            category_filename = _safe_filename(category)
 
             if _DEBUG:
                 print(f"Categories: {category} ")
@@ -85,12 +85,12 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
                             print(f"Item name: {item_name}")
 
                         created_item = market_item.create_new(item_name)
-                        price = 0
+                        price = default_price
 
                         # some files are malformed and don't have prices
                         if len(items_collection) >= 3:
-                            tmp_price = int(strip_codes(items_collection[1]))
-                            tmp_price2 = int(strip_codes(items_collection[2]))
+                            tmp_price = int(_strip_codes(items_collection[1]))
+                            tmp_price2 = int(_strip_codes(items_collection[2]))
                             if tmp_price == -1:
                                 price = tmp_price2
                             else:
@@ -102,18 +102,19 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
 
                         for item_prop in items_collection:
                             if _DEBUG:
-                                print(f"Item Property: {strip_codes(item_prop)}")
+                                print(f"Item Property: {_strip_codes(item_prop)}")
 
             market_file["DisplayName"] = category
 
-            output_filename = os.path.join(dir_basename, f"{input_filename[0]}_{category.replace(' ', '_')}.json")
+            output_filename = os.path.join(dir_basename, f"{input_filename[0]}_{category_filename}.json")
             with open(output_filename, mode="w") as output_file:
                 json.dump(market_file, output_file, indent=2)
 
-            print(json.dumps(market_file, indent=2))
+            if _DEBUG:
+                print(json.dumps(market_file, indent=2))
 
 
-def strip_codes(source: str) -> str:
+def _strip_codes(source: str) -> str:
     control_chars = ["\n", "\t"]
     # output = re.sub("\/\/.*", "", source).strip()
     for c in control_chars:
@@ -122,7 +123,16 @@ def strip_codes(source: str) -> str:
     return source.strip()
 
 
-def remove_notes(string):
+def _safe_filename(source: str) -> str:
+    invalid = r'<>:"/\|?* ,'
+
+    for char in invalid:
+        source = source.replace(char, '_')
+
+    return source
+
+
+def _remove_notes(string):
     pattern = r"(<<.*>>)"
     regex = re.compile(pattern, re.MULTILINE | re.DOTALL)
 
@@ -133,7 +143,7 @@ def remove_notes(string):
     return regex.sub(_replacer, string)
 
 
-def remove_comments(string):
+def _remove_comments(string):
     """
     Code taken from: https://stackoverflow.com/questions/2319019/using-regex-to-remove-comments-from-source-files
 
