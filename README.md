@@ -110,7 +110,6 @@ options:
                         Specify the default price for the imported items.
   -c CATEGORY, --category CATEGORY
                         Specify the Category name for the imported items.
-
 ```
 ## Attribution
 
