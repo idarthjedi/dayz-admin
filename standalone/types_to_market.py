@@ -28,10 +28,9 @@ def convert_types(types_file: str, default_price: int, category: str) -> bool:
     for type_item in econ_types:
 
         created_item = market_item.create_new(type_item)
-        price = default_price
 
-        created_item["MaxPriceThreshold"] = default_price
-        created_item["MinPriceThreshold"] = default_price
+        created_item["MaxPriceThreshold"] = int(default_price)
+        created_item["MinPriceThreshold"] = int(default_price)
         market_collection.append(created_item)
 
     market_file["DisplayName"] = category
