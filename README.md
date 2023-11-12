@@ -98,6 +98,21 @@ options:
                         Specify the optional price multiplier for the TraderPlus to Expansion conversion
 
 ```
+
+## standalone/types_to_market.py
+```
+usage: types_to_market.py [-h] [-f FILE] [-p PRICE] [-c CATEGORY]
+
+Loads the type file specified, and converts it into a market file, using pre-defined defaults.
+
+options:
+  -h, --help            show this help message and exit
+  -f FILE, --file FILE  Specify the types file to convert.
+  -p PRICE, --price PRICE
+                        Specify the default price for the imported items.
+  -c CATEGORY, --category CATEGORY
+                        Specify the Category name for the imported items.
+```
 ## Attribution
 
 Some icons by [Yusuke Kamiyamane](http://p.yusukekamiyamane.com/). Licensed under a [Creative Commons Attribution 3.0 License](http://creativecommons.org/licenses/by/3.0/).
