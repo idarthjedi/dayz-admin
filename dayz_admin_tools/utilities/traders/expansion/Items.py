@@ -33,7 +33,7 @@ class Items(dict):
 
         return True, FileManager.find_files(root_directory, ".json")
 
-    def load_items(self, file: str) -> tuple[bool, list]:
+    def load_items(self, file: str, ignore_variants: bool) -> tuple[bool, list]:
         """
         Loads individual items across all market files, will record errors if duplicates are found to already exist.
         :param file: name of the file to load into the types collection
@@ -59,9 +59,11 @@ class Items(dict):
 
         for market_item in items_list:
             if market_item.value in self:
-                errors.append(f"Object {market_item.value} duplications:{os.linesep}"\
-                              f"\t{Fore.GREEN}Winner: {self[market_item.value].filesource}{os.linesep}"\
-                              f"\t{Fore.RED}Loser: {file}.")
+                temp = self[market_item.value]
+                if temp.parent is None and ignore_variants == False:
+                    errors.append(f"Object {market_item.value} duplications:{os.linesep}"\
+                                  f"\t{Fore.GREEN}Winner: {self[market_item.value].filesource}{os.linesep}"\
+                                  f"\t{Fore.RED}Loser: {file}.")
             else:
                 parent = self[market_item.value] = Item(market_item.value, file)
                 # check for Variants
@@ -72,9 +74,10 @@ class Items(dict):
                     # no variants
                     for variant in variants_list[0].value:
                         if variant in self:
-                            errors.append(f"Object {variant} variant listed with duplications:{os.linesep}" \
-                                          f"\t{Fore.GREEN}Winner: {self[variant].filesource}{os.linesep}" \
-                                          f"\t{Fore.RED}Loser: {file}.")
+                            if not ignore_variants:
+                                errors.append(f"Object {variant} variant listed with duplications:{os.linesep}" \
+                                              f"\t{Fore.GREEN}Winner: {self[variant].filesource}{os.linesep}" \
+                                              f"\t{Fore.RED}Loser: {file}.")
                         else:
                             self[variant] = Item(variant, file, parent)
 

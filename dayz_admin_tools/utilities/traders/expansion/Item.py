@@ -12,8 +12,8 @@ class Item:
     def __init__(self, name: str, filesource: str, parent: type[Item] = None, variants: list[type[Item]] = None):
         self._name = name
         self._filesource = filesource
-        _parent = parent
-        _variants = variants
+        self._parent = parent
+        self._variants = variants
 
     @property
     def name(self) -> str:

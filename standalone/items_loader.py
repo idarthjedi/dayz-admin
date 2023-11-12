@@ -7,7 +7,7 @@ import argparse
 import sys
 
 
-def load_items(market_directory: str) -> tuple[list, list, Items]:
+def load_items(market_directory: str, ignore_variants: bool) -> tuple[list, list, Items]:
     """
 
     :param market_directory: Market Directory to load all the Type JSON Files
@@ -23,7 +23,7 @@ def load_items(market_directory: str) -> tuple[list, list, Items]:
     success, found_files = Items.find_item_files(market_directory)
 
     for f in found_files:
-        success, error = market_items.load_items(f)
+        success, error = market_items.load_items(f, ignore_variants)
         if not success:
             errors.append(error)
 
@@ -49,11 +49,17 @@ if __name__ == "__main__":
                                      )
     parser.add_argument("-d", "--dir",
                         help="Specify the Markets directory of Expansion Market folder to search for files to validate.",
-                        action="store")
+                        action="store",
+                        required=True, metavar='dir')
+
+    parser.add_argument("-iv", "--ignore_variants",
+                        help="Optional: Ignore variants when looking for duplications.",
+                        action="store",
+                        type=bool, default=False, const=True, nargs='?')
 
     if len(sys.argv) < 3:
         parser.print_help()
         exit()
 
     args = parser.parse_args()
-    load_items(args.dir)
+    load_items(args.dir, args.ignore_variants)
