@@ -99,6 +99,20 @@ options:
 
 ```
 
+## standalone/traderplusparts_to_vehicle_expansion.py
+```
+usage: traderplusparts_to_vehicle_expansion.py [-h] -f FILE [-m MULTIPLIER]
+
+Takes as input the name of a traderplus Vehicle Parts file, and will output an Expansion trader file of the same name all the individual parts created as
+SpawnAttachments.
+
+options:
+  -h, --help            show this help message and exit
+  -f FILE, --file FILE  Specify the TraderPlus file name to convert.
+  -m MULTIPLIER, --multiplier MULTIPLIER
+                        Specify the optional price multiplier for the TraderPlus to Expansion conversion
+```
+
 ## standalone/types_to_market.py
 ```
 usage: types_to_market.py [-h] [-f FILE] [-p PRICE] [-c CATEGORY]
