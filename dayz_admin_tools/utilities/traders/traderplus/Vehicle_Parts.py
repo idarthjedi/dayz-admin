@@ -50,7 +50,7 @@ class Vehicle_Parts(dict):
                     line = self._remove_comments(line)
                     line = self._remove_notes(line)
                     # new_lines.append(line.replace("<VehicleParts> ", ""))
-                    vehicle_name = line.replace("<VehicleParts> ", "")
+                    vehicle_name = self._strip_codes(line.replace("<VehicleParts>", "").strip())
                     new_lines[vehicle_name] = []
 
             else:

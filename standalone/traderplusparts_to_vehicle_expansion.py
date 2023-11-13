@@ -18,10 +18,17 @@ import re
 
 def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
 
+    # list of generic parts to not include in the main parts file, but to put in a generic parts file
+    generic_vehicle_parts = ["SparkPlug", "CarBattery", "CarRadiator","HeadlightH7", "TruckBattery"]
+    unique_parts_names = []
+
     trader_items_object = trader_items(filename)
     market_file = dayz_admin_tools.utilities.traders.expansion.Items.Items.file_header()
+    parts_file = dayz_admin_tools.utilities.traders.expansion.Items.Items.file_header()
 
+    parts_collection = parts_file["Items"]
     market_collection = market_file["Items"]
+
     input_filename = FileManager.return_filename(filename, True)
     dir_basename = FileManager.return_dirname(filename)
     # set up the regular expression to search for <VALUES>
@@ -33,20 +40,60 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
 
     market_file["Items"].clear()
 
+    # create the main vehicle file
     for vehicle in new_lines:
         created_item = market_item.create_new(vehicle)
         price = default_price
         created_item["MaxPriceThreshold"] = math.floor(float(price) * multiplier)
         created_item["MinPriceThreshold"] = math.floor(float(price) * multiplier)
         for attachment in new_lines[vehicle]:
+
             created_item["SpawnAttachments"].append(attachment)
+            if attachment not in unique_parts_names:
+                if attachment not in generic_vehicle_parts:
+                    parts_created_item = market_item.create_new(attachment)
+                    price = default_price
+                    parts_created_item["MaxPriceThreshold"] = math.floor(float(price) * multiplier)
+                    parts_created_item["MinPriceThreshold"] = math.floor(float(price) * multiplier)
+                    parts_collection.append(parts_created_item)
+
+                    unique_parts_names.append(attachment)
 
         market_collection.append(created_item)
 
-    market_file["DisplayName"] = os.path.basename(input_filename[0]).replace("_Vehicle")
+    # create Vehicle_Parts file
+    parts_file["DisplayName"] = os.path.basename(f"{input_filename[0]} Parts")
     output_filename = os.path.join(dir_basename, f"expansion_{os.path.basename(input_filename[0])}.json")
     with open(output_filename, mode="w") as output_file:
+        json.dump(parts_file, output_file, indent=2)
+
+    market_file["DisplayName"] = os.path.basename(input_filename[0]).replace("_Vehicle_parts", "")
+    output_filename = os.path.join(dir_basename, f"expansion_{os.path.basename(input_filename[0]).replace('_Vehicle_parts', '')}.json")
+    with open(output_filename, mode="w") as output_file:
         json.dump(market_file, output_file, indent=2)
+
+    # create generic vehicle parts file
+    # Adding these in by hand, b/c they seem to always be in common - will have to tweak if that isn't the case
+    generic_market_file = dayz_admin_tools.utilities.traders.expansion.Items.Items.file_header()
+    generic_collection = generic_market_file["Items"]
+
+    for part in generic_vehicle_parts:
+        created_item = market_item.create_new(part)
+        price = default_price
+        created_item["MaxPriceThreshold"] = math.floor(float(price) * multiplier)
+        created_item["MinPriceThreshold"] = math.floor(float(price) * multiplier)
+        generic_collection.append(created_item)
+
+    generic_market_file["DisplayName"] = "Generic Vehicle Parts"
+    output_filename = os.path.join(dir_basename, "Generic_Vehicle_Parts.json")
+    with open(output_filename, mode="w") as output_file:
+        json.dump(generic_market_file, output_file, indent=2)
+
+
+    # create the Vehicle Parts file
+
+    pass
+
 
 def _strip_codes(source: str) -> str:
     control_chars = ["\n", "\t"]
