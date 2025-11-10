@@ -1,13 +1,17 @@
-import os
-
-from dayz_admin_tools.utilities.traders.expansion.Items import Items
-from dayz_admin_tools.config import ROOT_DIR
-from colorama import Fore, Back, Style, init as colorama_init
 import argparse
+import os
 import sys
 
+from colorama import Back, Fore, Style
+from colorama import init as colorama_init
 
-def load_items(market_directory: str, ignore_variants: bool) -> tuple[list, list, Items]:
+from dayz_admin_tools.config import ROOT_DIR
+from dayz_admin_tools.utilities.traders.expansion.Items import Items
+
+
+def load_items(
+    market_directory: str, ignore_variants: bool
+) -> tuple[list, list, Items]:
     """
 
     :param market_directory: Market Directory to load all the Type JSON Files
@@ -27,7 +31,10 @@ def load_items(market_directory: str, ignore_variants: bool) -> tuple[list, list
         if not success:
             errors.append(error)
 
-    print(Fore.GREEN+f"The following files were loaded, validated against a schema, and checked for unique values:{os.linesep}")
+    print(
+        Fore.GREEN
+        + f"The following files were loaded, validated against a schema, and checked for unique values:{os.linesep}"
+    )
     [print(f"\t{Fore.GREEN}{x}") for x in found_files]
     print(f"{os.linesep}")
 
@@ -42,20 +49,31 @@ def load_items(market_directory: str, ignore_variants: bool) -> tuple[list, list
 if __name__ == "__main__":
 
     colorama_init()
-    parser = argparse.ArgumentParser(prog="items_loader.py",
-                                     description="Loads all the Market Items JSON files from the Markets directory "\
-                                                 "and validates them against a schema, and ensures there is "\
-                                                 "only one instance of every class in all Market files.",
-                                     )
-    parser.add_argument("-d", "--dir",
-                        help="Specify the Markets directory of Expansion Market folder to search for files to validate.",
-                        action="store",
-                        required=True, metavar='dir')
+    parser = argparse.ArgumentParser(
+        prog="items_loader.py",
+        description="Loads all the Market Items JSON files from the Markets directory "
+        "and validates them against a schema, and ensures there is "
+        "only one instance of every class in all Market files.",
+    )
+    parser.add_argument(
+        "-d",
+        "--dir",
+        help="Specify the Markets directory of Expansion Market folder to search for files to validate.",
+        action="store",
+        required=True,
+        metavar="dir",
+    )
 
-    parser.add_argument("-iv", "--ignore_variants",
-                        help="Optional: Ignore variants when looking for duplications.",
-                        action="store",
-                        type=bool, default=False, const=True, nargs='?')
+    parser.add_argument(
+        "-iv",
+        "--ignore_variants",
+        help="Optional: Ignore variants when looking for duplications.",
+        action="store",
+        type=bool,
+        default=False,
+        const=True,
+        nargs="?",
+    )
 
     if len(sys.argv) < 3:
         parser.print_help()

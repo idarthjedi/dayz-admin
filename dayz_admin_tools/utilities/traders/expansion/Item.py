@@ -1,4 +1,6 @@
-from __future__ import annotations # included to support self type reference in __init__ for parent classes
+from __future__ import \
+    annotations  # included to support self type reference in __init__ for parent classes
+
 # see https://peps.python.org/pep-0563/
 
 
@@ -9,7 +11,13 @@ class Item:
     _parent: type[Item]
     _variants: list[type[Item]]
 
-    def __init__(self, name: str, filesource: str, parent: type[Item] = None, variants: list[type[Item]] = None):
+    def __init__(
+        self,
+        name: str,
+        filesource: str,
+        parent: type[Item] = None,
+        variants: list[type[Item]] = None,
+    ):
         self._name = name
         self._filesource = filesource
         self._parent = parent
@@ -51,5 +59,5 @@ class Item:
             "MinStockThreshold": 1,
             "QuantityPercent": -1,
             "SpawnAttachments": [],
-            "Variants": []
+            "Variants": [],
         }

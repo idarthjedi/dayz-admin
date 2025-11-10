@@ -1,13 +1,14 @@
-from colorama import Fore, init as colorama_init
-from standalone.validator import validate_json, validate_xml
-from standalone.types_loader import load_profiles
-from PyQt6.QtWidgets import QApplication, QMainWindow
-from dayz_admin_tools.utilities.economy.Types import Types
+import sys
 
+from colorama import Fore
+from colorama import init as colorama_init
+from PyQt6.QtWidgets import QApplication, QMainWindow
+
+from dayz_admin_tools.utilities.economy.Types import Types
 from src.config import config
 from src.forms import mainConfig
-
-import sys
+from standalone.types_loader import load_profiles
+from standalone.validator import validate_json, validate_xml
 
 _profiles_directory = ""
 _json_directory = ""
@@ -33,12 +34,12 @@ def main():
         validate_xml(path)
 
     if len(_profiles_directory) <= 0:
-        print(Fore.RED+f"No DayZ Profile folder selected, exiting...")
+        print(Fore.RED + f"No DayZ Profile folder selected, exiting...")
     else:
         found_files, error_files, loaded_types = load_profiles(_profiles_directory)
 
-#    for type_item in loaded_types.types():
-#        print(type_item.filesource)
+    #    for type_item in loaded_types.types():
+    #        print(type_item.filesource)
 
     return
 
@@ -61,7 +62,9 @@ def readconfig():
     ConfigWindow.show()
     ret = app.exec()
 
-    _profiles_directory, _market_dir, _trader_dir, _json_directory, _xml_directory = config.loadConfig()
+    _profiles_directory, _market_dir, _trader_dir, _json_directory, _xml_directory = (
+        config.loadConfig()
+    )
 
     return
 

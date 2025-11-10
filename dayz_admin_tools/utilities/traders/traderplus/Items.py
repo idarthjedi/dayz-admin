@@ -1,4 +1,5 @@
 import re
+
 from dayz_admin_tools.utilities.files.fManager import FileManager
 
 
@@ -69,7 +70,7 @@ class Items(dict):
         invalid = r'<>:"/\|?* ,'
 
         for char in invalid:
-            source = source.replace(char, '_')
+            source = source.replace(char, "_")
 
         return source
 
@@ -82,7 +83,6 @@ class Items(dict):
                 return ""
 
         return regex.sub(_replacer, string)
-
 
     def _remove_comments(self, string):
         """
@@ -105,6 +105,3 @@ class Items(dict):
                 return match.group(1)  # captured quoted-string
 
         return regex.sub(_replacer, string)
-
-
-

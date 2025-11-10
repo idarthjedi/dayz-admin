@@ -1,10 +1,12 @@
-import os
-
-from dayz_admin_tools.utilities.economy.Types import Types
-from dayz_admin_tools.config import ROOT_DIR
-from colorama import Fore, Back, Style, init as colorama_init
 import argparse
+import os
 import sys
+
+from colorama import Back, Fore, Style
+from colorama import init as colorama_init
+
+from dayz_admin_tools.config import ROOT_DIR
+from dayz_admin_tools.utilities.economy.Types import Types
 
 
 def load_profiles(profiles_directory: str) -> tuple[list, list, Types]:
@@ -28,7 +30,10 @@ def load_profiles(profiles_directory: str) -> tuple[list, list, Types]:
         if not success:
             errors.append(error)
 
-    print(Fore.GREEN+f"The following files were loaded, validated against a schema, and checked for unique values:{os.linesep}")
+    print(
+        Fore.GREEN
+        + f"The following files were loaded, validated against a schema, and checked for unique values:{os.linesep}"
+    )
     [print(f"\t{Fore.GREEN}{x}") for x in found_files]
     print(f"{os.linesep}")
 
@@ -43,14 +48,18 @@ def load_profiles(profiles_directory: str) -> tuple[list, list, Types]:
 if __name__ == "__main__":
 
     colorama_init()
-    parser = argparse.ArgumentParser(prog="types_loader.py",
-                                     description="Loads all the types.xml from the DayZ profiles directory "\
-                                                 "and validates them against a schema, and ensures there is "\
-                                                 "only one instance of every class in all types.xml files.",
-                                     )
-    parser.add_argument("-d", "--dir",
-                        help="Specify the root Profiles directory of DayZ to search for files to validate.",
-                        action="store")
+    parser = argparse.ArgumentParser(
+        prog="types_loader.py",
+        description="Loads all the types.xml from the DayZ profiles directory "
+        "and validates them against a schema, and ensures there is "
+        "only one instance of every class in all types.xml files.",
+    )
+    parser.add_argument(
+        "-d",
+        "--dir",
+        help="Specify the root Profiles directory of DayZ to search for files to validate.",
+        action="store",
+    )
 
     if len(sys.argv) < 3:
         parser.print_help()

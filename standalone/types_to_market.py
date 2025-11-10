@@ -1,12 +1,16 @@
-from dayz_admin_tools.utilities.files.fManager import FileManager
-from dayz_admin_tools.utilities.economy.Types import Types
-import dayz_admin_tools.utilities.traders.expansion.Items
-from dayz_admin_tools.utilities.traders.expansion.Item import Item as market_item
-import json
-from colorama import Fore, Back, Style, init as colorama_init
-import sys
-import os
 import argparse
+import json
+import os
+import sys
+
+from colorama import Back, Fore, Style
+from colorama import init as colorama_init
+
+import dayz_admin_tools.utilities.traders.expansion.Items
+from dayz_admin_tools.utilities.economy.Types import Types
+from dayz_admin_tools.utilities.files.fManager import FileManager
+from dayz_admin_tools.utilities.traders.expansion.Item import \
+    Item as market_item
 
 
 def convert_types(types_file: str, default_price: int, category: str) -> bool:
@@ -45,21 +49,28 @@ def convert_types(types_file: str, default_price: int, category: str) -> bool:
 if __name__ == "__main__":
 
     colorama_init()
-    parser = argparse.ArgumentParser(prog="types_to_market.py",
-                                     description="Loads the type file specified, and converts it into "\
-                                                 "a market file, using pre-defined defaults. "\
-                                     )
-    parser.add_argument("-f", "--file",
-                        help="Specify the types file to convert.",
-                        action="store")
+    parser = argparse.ArgumentParser(
+        prog="types_to_market.py",
+        description="Loads the type file specified, and converts it into "
+        "a market file, using pre-defined defaults. ",
+    )
+    parser.add_argument(
+        "-f", "--file", help="Specify the types file to convert.", action="store"
+    )
 
-    parser.add_argument("-p", "--price",
-                        help="Specify the default price for the imported items.",
-                        action="store")
+    parser.add_argument(
+        "-p",
+        "--price",
+        help="Specify the default price for the imported items.",
+        action="store",
+    )
 
-    parser.add_argument("-c", "--category",
-                        help="Specify the Category name for the imported items.",
-                        action="store")
+    parser.add_argument(
+        "-c",
+        "--category",
+        help="Specify the Category name for the imported items.",
+        action="store",
+    )
 
     if len(sys.argv) < 7:
         parser.print_help()

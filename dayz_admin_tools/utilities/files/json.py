@@ -1,6 +1,8 @@
-from dayz_admin_tools.utilities.files.fManager import FileManager
 import json
 import os
+
+from dayz_admin_tools.utilities.files.fManager import FileManager
+
 """JSON File Manager
 
 File Manager for JSON objects 

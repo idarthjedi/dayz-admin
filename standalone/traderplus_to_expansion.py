@@ -1,19 +1,20 @@
+import argparse
 import json
 import math
 import os
+import re
+import sys
+
+from colorama import Back, Fore, Style
+from colorama import init as colorama_init
 
 import dayz_admin_tools.utilities.traders.expansion.Items
 from dayz_admin_tools.config import _DEBUG
-
-from dayz_admin_tools.utilities.traders.expansion.Item import Item as market_item
-from dayz_admin_tools.utilities.traders.traderplus.Items import Items as trader_items
-
-
-from colorama import Fore, Back, Style, init as colorama_init
 from dayz_admin_tools.utilities.files.fManager import FileManager
-import argparse
-import sys
-import re
+from dayz_admin_tools.utilities.traders.expansion.Item import \
+    Item as market_item
+from dayz_admin_tools.utilities.traders.traderplus.Items import \
+    Items as trader_items
 
 
 def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
@@ -32,7 +33,7 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
         new_lines = trader_items_object.clean_file(tp_file.readlines())
 
     # right now there is an assumption that the traderplus file is correctly formatted
-    tp_data = '\n'.join(new_lines)
+    tp_data = "\n".join(new_lines)
 
     tp_categories = tp_data.split("<Category>")
     for categories in tp_categories:
@@ -72,8 +73,12 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
                             else:
                                 price = tmp_price
 
-                        created_item["MaxPriceThreshold"] = math.floor(float(price) * multiplier)
-                        created_item["MinPriceThreshold"] = math.floor(float(price) * multiplier)
+                        created_item["MaxPriceThreshold"] = math.floor(
+                            float(price) * multiplier
+                        )
+                        created_item["MinPriceThreshold"] = math.floor(
+                            float(price) * multiplier
+                        )
                         market_collection.append(created_item)
 
                         for item_prop in items_collection:
@@ -82,7 +87,9 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
 
             market_file["DisplayName"] = category
 
-            output_filename = os.path.join(dir_basename, f"{input_filename[0]}_{category_filename}.json")
+            output_filename = os.path.join(
+                dir_basename, f"{input_filename[0]}_{category_filename}.json"
+            )
             with open(output_filename, mode="w") as output_file:
                 json.dump(market_file, output_file, indent=2)
 
@@ -103,30 +110,38 @@ def _safe_filename(source: str) -> str:
     invalid = r'<>:"/\|?* ,'
 
     for char in invalid:
-        source = source.replace(char, '_')
+        source = source.replace(char, "_")
 
     return source
 
 
 if __name__ == "__main__":
     colorama_init()
-    parser = argparse.ArgumentParser(prog="traderplus_to_expansion.py",
-                                     description="Takes as input the name of a traderplus file, and will output an "\
-                                                 "Expansion trader file of the same name with category extensions (e.g.) "\
-                                                 "FILE=geb_trader, output=geb_trader_fish.json, geb_trader_fishmeat.json, etc. "\
-                                                 "Code optionally takes a multiplier (float) to apply against the priceses listed in "\
-                                                "the traderplus file e.g. 1.5 multiper will make the prices 1.5 times higher than "\
-                                                "in the original traderplus file."
-                                     )
-    parser.add_argument("-f", "--file",
-                        help="Specify the TraderPlus file name to convert.",
-                        action="store",
-                        required=True)
+    parser = argparse.ArgumentParser(
+        prog="traderplus_to_expansion.py",
+        description="Takes as input the name of a traderplus file, and will output an "
+        "Expansion trader file of the same name with category extensions (e.g.) "
+        "FILE=geb_trader, output=geb_trader_fish.json, geb_trader_fishmeat.json, etc. "
+        "Code optionally takes a multiplier (float) to apply against the priceses listed in "
+        "the traderplus file e.g. 1.5 multiper will make the prices 1.5 times higher than "
+        "in the original traderplus file.",
+    )
+    parser.add_argument(
+        "-f",
+        "--file",
+        help="Specify the TraderPlus file name to convert.",
+        action="store",
+        required=True,
+    )
 
-    parser.add_argument("-m", "--multiplier", type=float,
-                        help="Specify the optional price multiplier for the TraderPlus to Expansion conversion",
-                        action="store",
-                        required=False)
+    parser.add_argument(
+        "-m",
+        "--multiplier",
+        type=float,
+        help="Specify the optional price multiplier for the TraderPlus to Expansion conversion",
+        action="store",
+        required=False,
+    )
 
     if len(sys.argv) < 3:
         parser.print_help()
@@ -137,5 +152,3 @@ if __name__ == "__main__":
         main(args.file, multiplier=args.multiplier)
     else:
         main(args.file)
-
-

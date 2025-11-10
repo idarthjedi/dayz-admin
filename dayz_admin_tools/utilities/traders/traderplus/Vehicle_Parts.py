@@ -1,4 +1,5 @@
 import re
+
 from dayz_admin_tools.utilities.files.fManager import FileManager
 
 
@@ -50,7 +51,9 @@ class Vehicle_Parts(dict):
                     line = self._remove_comments(line)
                     line = self._remove_notes(line)
                     # new_lines.append(line.replace("<VehicleParts> ", ""))
-                    vehicle_name = self._strip_codes(line.replace("<VehicleParts>", "").strip())
+                    vehicle_name = self._strip_codes(
+                        line.replace("<VehicleParts>", "").strip()
+                    )
                     new_lines[vehicle_name] = []
 
             else:
@@ -73,7 +76,7 @@ class Vehicle_Parts(dict):
         invalid = r'<>:"/\|?* ,'
 
         for char in invalid:
-            source = source.replace(char, '_')
+            source = source.replace(char, "_")
 
         return source
 
@@ -86,7 +89,6 @@ class Vehicle_Parts(dict):
                 return ""
 
         return regex.sub(_replacer, string)
-
 
     def _remove_comments(self, string):
         """
@@ -109,6 +111,3 @@ class Vehicle_Parts(dict):
                 return match.group(1)  # captured quoted-string
 
         return regex.sub(_replacer, string)
-
-
-

@@ -1,9 +1,10 @@
 import os
 
+from colorama import Back, Fore, Style
 from lxml import etree
+
 from dayz_admin_tools.config import ROOT_DIR
 from dayz_admin_tools.utilities.economy.Type import Type
-from colorama import Fore, Back, Style
 
 
 class Types(dict):
@@ -11,7 +12,9 @@ class Types(dict):
 
     def __init__(self):
         # load the XSD file
-        xmlschema_doc = etree.parse(ROOT_DIR + "/dayz_admin_tools/utilities/economy/schemas/types.xsd")
+        xmlschema_doc = etree.parse(
+            ROOT_DIR + "/dayz_admin_tools/utilities/economy/schemas/types.xsd"
+        )
         self._xmlschema = etree.XMLSchema(xmlschema_doc)
         super().__init__()
 
@@ -38,9 +41,15 @@ class Types(dict):
         folders = cfge_file.xpath("//@folder")
         for each_folder in folders:
             # //*[@folder='expansion_ce']/file[@type='types']
-            include_files = cfge_file.xpath(f"//*[@folder='{each_folder}']/file[@type='types']")
+            include_files = cfge_file.xpath(
+                f"//*[@folder='{each_folder}']/file[@type='types']"
+            )
             for each_type_file in include_files:
-                list_files.append(os.path.join(root_directory, each_folder, each_type_file.attrib["name"]))
+                list_files.append(
+                    os.path.join(
+                        root_directory, each_folder, each_type_file.attrib["name"]
+                    )
+                )
 
         return True, list_files
 
@@ -62,11 +71,13 @@ class Types(dict):
         # xml turned out to be valid per schema, loop through each of the type in types and create an type object
         all_types = xml_doc.xpath("//types/type")
         for each_type in all_types:
-            obj_name = each_type.attrib['name']
+            obj_name = each_type.attrib["name"]
             if obj_name in self:
-                errors.append(f"Object {obj_name} duplications:{os.linesep}"\
-                              f"\t{Fore.GREEN}Winner: {self[obj_name].filesource}{os.linesep}"\
-                              f"\t{Fore.RED}Loser: {file}.")
+                errors.append(
+                    f"Object {obj_name} duplications:{os.linesep}"
+                    f"\t{Fore.GREEN}Winner: {self[obj_name].filesource}{os.linesep}"
+                    f"\t{Fore.RED}Loser: {file}."
+                )
 
             else:
                 # Only append if there wasn't a duplicate already

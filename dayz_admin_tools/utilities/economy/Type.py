@@ -18,7 +18,6 @@ class Type:
     def filesource(self) -> str:
         return self._filesource
 
-    #@name.setter
-    #def name(self, name: str):
+    # @name.setter
+    # def name(self, name: str):
     #    self._name = name
-

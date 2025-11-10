@@ -1,22 +1,26 @@
-import os
 import json
-import jsonschema.exceptions
+import os
 
-from dayz_admin_tools.config import ROOT_DIR
-from jsonschema import validate as json_validate
-from dayz_admin_tools.utilities.files.fManager import FileManager
+import jsonschema.exceptions
+from colorama import Back, Fore, Style
 from jsonpath_ng import jsonpath
 from jsonpath_ng.ext import parser as json_parser
+from jsonschema import validate as json_validate
 
+from dayz_admin_tools.config import ROOT_DIR
+from dayz_admin_tools.utilities.files.fManager import FileManager
 from dayz_admin_tools.utilities.traders.expansion.Item import Item
-from colorama import Fore, Back, Style
 
 
 class Items(dict):
 
     def __init__(self):
         # load the XSD file
-        with open(ROOT_DIR + "/dayz_admin_tools/utilities/traders/expansion/schemas/items.schema.json", "r") as schema_doc:
+        with open(
+            ROOT_DIR
+            + "/dayz_admin_tools/utilities/traders/expansion/schemas/items.schema.json",
+            "r",
+        ) as schema_doc:
             self._jsonschema = json.loads(schema_doc.read())
 
         super().__init__()
@@ -50,7 +54,7 @@ class Items(dict):
             # The document failed Schema Validation, move onto the next document
             return False, errors
 
-        classname_search = json_parser.parse('$..Items..ClassName')
+        classname_search = json_parser.parse("$..Items..ClassName")
 
         items_list = classname_search.find(json_doc)
         if len(items_list) <= 0:
@@ -61,41 +65,46 @@ class Items(dict):
             if market_item.value in self:
                 temp = self[market_item.value]
                 if temp.parent is None and ignore_variants == False:
-                    errors.append(f"Object {market_item.value} duplications:{os.linesep}"\
-                                  f"\t{Fore.GREEN}Winner: {self[market_item.value].filesource}{os.linesep}"\
-                                  f"\t{Fore.RED}Loser: {file}.")
+                    errors.append(
+                        f"Object {market_item.value} duplications:{os.linesep}"
+                        f"\t{Fore.GREEN}Winner: {self[market_item.value].filesource}{os.linesep}"
+                        f"\t{Fore.RED}Loser: {file}."
+                    )
             else:
                 parent = self[market_item.value] = Item(market_item.value, file)
                 # check for Variants
                 variants_search = json_parser.parse(
-                    f"$.Items[?(@.ClassName=='{market_item.value}')].Variants")
+                    f"$.Items[?(@.ClassName=='{market_item.value}')].Variants"
+                )
                 variants_list = variants_search.find(json_doc)
                 if len(variants_list[0].value) > 0:
                     # no variants
                     for variant in variants_list[0].value:
                         if variant in self:
                             if not ignore_variants:
-                                errors.append(f"Object {variant} variant listed with duplications:{os.linesep}" \
-                                              f"\t{Fore.GREEN}Winner: {self[variant].filesource}{os.linesep}" \
-                                              f"\t{Fore.RED}Loser: {file}.")
+                                errors.append(
+                                    f"Object {variant} variant listed with duplications:{os.linesep}"
+                                    f"\t{Fore.GREEN}Winner: {self[variant].filesource}{os.linesep}"
+                                    f"\t{Fore.RED}Loser: {file}."
+                                )
                         else:
                             self[variant] = Item(variant, file, parent)
 
         # JSON turned out to be valid per schema, loop through each of the Items and create an Item object
-        
-#        # xml turned out to be valid per schema, loop through each of the type in types and create an type object
-#        all_types = xml_doc.xpath("//types/type")
-#        for each_type in all_types:
-#            obj_name = each_type.attrib['name']
-#            if obj_name in self:
-#                errors.append(f"Object {obj_name} duplications:{os.linesep}"\
-#                              f"\t{Fore.GREEN}Winner: {self[obj_name].filesource}{os.linesep}"\
-#                              f"\t{Fore.RED}Loser: {file}.")
-#
-#            else:
-#                # Only append if there wasn't a duplicate already
-#                self[obj_name] = Type(obj_name, file)
-#
+
+        #        # xml turned out to be valid per schema, loop through each of the type in types and create an type object
+        #        all_types = xml_doc.xpath("//types/type")
+        #        for each_type in all_types:
+        #            obj_name = each_type.attrib['name']
+        #            if obj_name in self:
+        #                errors.append(f"Object {obj_name} duplications:{os.linesep}"\
+        #                              f"\t{Fore.GREEN}Winner: {self[obj_name].filesource}{os.linesep}"\
+        #                              f"\t{Fore.RED}Loser: {file}.")
+        #
+        #            else:
+        #                # Only append if there wasn't a duplicate already
+        #                self[obj_name] = Type(obj_name, file)
+        #
         return len(errors) == 0, errors
 
     @staticmethod
@@ -108,5 +117,5 @@ class Items(dict):
             "Color": "FBFCFEFF",
             "IsExchange": 0,
             "InitStockPercent": 25.0,
-            "Items": []
+            "Items": [],
         }

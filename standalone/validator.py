@@ -1,9 +1,12 @@
+import argparse
+import os
+import sys
+
+from colorama import Back, Fore, Style
+from colorama import init as colorama_init
+
 from dayz_admin_tools.utilities.files.json import JSONManager
 from dayz_admin_tools.utilities.files.xml import XMLManager
-from colorama import Fore, Back, Style, init as colorama_init
-import sys
-import os
-import argparse
 
 tab_char = "\t"
 
@@ -11,7 +14,10 @@ tab_char = "\t"
 def validate_json(root_path: str):
     resp, count, files = JSONManager.validate_files(root_path)
 
-    print(Fore.GREEN + f"{count} JSON Files validated{os.linesep}{tab_char}path{root_path}{os.linesep}")
+    print(
+        Fore.GREEN
+        + f"{count} JSON Files validated{os.linesep}{tab_char}path{root_path}{os.linesep}"
+    )
     if not resp:
         print(Fore.RED + f"The following files failed JSON validation:")
         [print(f"{tab_char}{err}") for err in files]
@@ -21,7 +27,10 @@ def validate_json(root_path: str):
 def validate_xml(root_path: str):
     resp, count, files = XMLManager.validate_files(root_path)
 
-    print(Fore.GREEN + f"{count} XML Files validated{os.linesep}{tab_char}path{root_path}{os.linesep}")
+    print(
+        Fore.GREEN
+        + f"{count} XML Files validated{os.linesep}{tab_char}path{root_path}{os.linesep}"
+    )
     if not resp:
         print(Fore.RED + f"The following files failed XML validation:")
         [print(f"{tab_char}{err}") for err in files]
@@ -29,16 +38,25 @@ def validate_xml(root_path: str):
 
 
 def main():
-    parser = argparse.ArgumentParser(prog="validator.py",
-                                     description="Quick file validator for JSON and XML files",
-                                     )
-    parser.add_argument("-t", "--type", choices=['JSON', 'XML', 'BOTH'], default='BOTH',
-                        help="Specify whether you want to validate JSON or XML(Default)",
-                        action="store")
-    parser.add_argument("-d", "--dir",
-                        help="Specify a directory to search for files to validate."\
-                             "Multiple directories can be added using spaces between them",
-                        action="append")
+    parser = argparse.ArgumentParser(
+        prog="validator.py",
+        description="Quick file validator for JSON and XML files",
+    )
+    parser.add_argument(
+        "-t",
+        "--type",
+        choices=["JSON", "XML", "BOTH"],
+        default="BOTH",
+        help="Specify whether you want to validate JSON or XML(Default)",
+        action="store",
+    )
+    parser.add_argument(
+        "-d",
+        "--dir",
+        help="Specify a directory to search for files to validate."
+        "Multiple directories can be added using spaces between them",
+        action="append",
+    )
 
     if len(sys.argv) < 5:
         parser.print_help()

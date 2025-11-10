@@ -1,8 +1,9 @@
 import xml.sax
+from xml.sax import make_parser
+from xml.sax.handler import ContentHandler
 
 from dayz_admin_tools.utilities.files.fManager import FileManager
-from xml.sax.handler import ContentHandler
-from xml.sax import make_parser
+
 """XML File Manager
 
 Creates an Instance of a XML File for various Management functions

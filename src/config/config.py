@@ -1,10 +1,13 @@
 import json
 import os
 import sys
-from PyQt6.QtWidgets import QApplication, QMainWindow
+
 from PyQt6.QtCore import QCoreApplication
+from PyQt6.QtWidgets import QApplication, QMainWindow
+
 from src.config import config
 from src.forms import mainConfig
+
 
 def loadConfig() -> tuple[str, list, list, list, list]:
     """
@@ -19,7 +22,7 @@ def loadConfig() -> tuple[str, list, list, list, list]:
                 dest.write(src.read())
 
     if os.path.exists(f"{cur_dir}/app-config.json"):
-        with open(f'{cur_dir}/app-config.json') as config_file:
+        with open(f"{cur_dir}/app-config.json") as config_file:
             try:
                 config = json.load(config_file)
                 _config_version = float(config["config-version"])
@@ -35,18 +38,28 @@ def loadConfig() -> tuple[str, list, list, list, list]:
             except json.JSONDecodeError as error:
                 raise "Cannot validate app-config.json"
 
-    #TODO: Should change this into a dict object, before it grows too large!
-    return _profiles_directory, _market_directory, _trader_directory, _json_directory, _xml_directory
+    # TODO: Should change this into a dict object, before it grows too large!
+    return (
+        _profiles_directory,
+        _market_directory,
+        _trader_directory,
+        _json_directory,
+        _xml_directory,
+    )
 
-def saveConfig(profileDir: str, market_dir: str, traders_dir: str, json_items: [], xml_items: []) -> bool:
+
+def saveConfig(
+    profileDir: str, market_dir: str, traders_dir: str, json_items: [], xml_items: []
+) -> bool:
 
     cur_dir = os.path.realpath(os.path.join(os.path.dirname(__file__)))
 
     data = {"config-version": 1.1}
-    properties = {"dayz-profile-dir": profileDir,
-                  "market-dir": market_dir,
-                  "trader-dir": traders_dir
-                  }
+    properties = {
+        "dayz-profile-dir": profileDir,
+        "market-dir": market_dir,
+        "trader-dir": traders_dir,
+    }
 
     other_dirs, json_dirs, xml_dirs = {}, {}, {}
 
@@ -73,4 +86,3 @@ def setconfig() -> bool:
         ui.setupUi(MainWindow)
         MainWindow.show()
         ret = app.exec()
-
