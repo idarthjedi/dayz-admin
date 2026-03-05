@@ -1,11 +1,58 @@
 # dayz-admin
-Author: 
+Author:
     DarthJedi
 
-Initial Release Date: 
+Initial Release Date:
     02/2023
 
 A collection of utilities and scripts I've written to help in my DayZ Management
+
+## Setup
+
+Requires Python 3.9+ and [uv](https://docs.astral.sh/uv/).
+
+```
+uv sync
+```
+
+For development tools (black, isort, pytest):
+```
+uv sync --group dev
+```
+
+## Unified CLI
+
+All tools are available through a single `dayz-admin` command:
+
+```
+uv run dayz-admin <command> [options]
+
+Available commands:
+  validate          Validate JSON and/or XML files
+  types             Load and validate types.xml files
+  items             Load and validate market item files
+  airdrop           Update airdrop settings
+  convert           Convert between trader formats
+    traderplus      Convert TraderPlus to Expansion
+    vehicle-parts   Convert TraderPlus vehicle parts to Expansion
+    types-to-market Convert types.xml to market file
+  compare           Compare two types.xml files
+
+Global options:
+  -v, --verbose     Verbose output
+  -q, --quiet       Quiet output (warnings and errors only)
+```
+
+Examples:
+```
+uv run dayz-admin validate -t JSON -d /path/to/profiles
+uv run dayz-admin types -d /path/to/profiles
+uv run dayz-admin convert traderplus -f trader_file.txt -m 1.5
+uv run dayz-admin compare -f1 types1.xml -f2 types2.xml
+```
+
+All tools are also available as standalone scripts (see below).
+
 ## src/main.py
 
 This loads the main application (WIP) that brings a GUI interface to all the different utilities written within this toolset.
@@ -70,7 +117,7 @@ options:
 ## standalone/airdrop_loader.py
 
 ```
-usage: airdrop_loader.py [-h] [-d DIR] [-i ITEM] [-f FILE] [-s {d,default,m,medical,b,basebuilding,m,military}]
+usage: airdrop_loader.py [-h] [-d DIR] [-i ITEM] [-f FILE] [-s {d,default,med,medical,b,basebuilding,mil,military}]
 
 Searches for objects in a specified market file, adds those objects and all their variants to the airdropsettings, given each variant equal spawn chances.
 
@@ -79,7 +126,7 @@ options:
   -d DIR, --dir DIR     Specify the root Expansion configuration directory to search for files to update.
   -i ITEM, --item ITEM  Specify the fragment of the item to search for, e.g. Diesel_TortillaBag
   -f FILE, --file FILE  Specify the specific Market file to examine
-  -s {d,default,m,medical,b,basebuilding,m,military}, --section {d,default,m,medical,b,basebuilding,m,military}
+  -s {d,default,med,medical,b,basebuilding,mil,military}, --section {d,default,med,medical,b,basebuilding,mil,military}
                         Identifies the section of the airdrop settings file
 
 ```
@@ -127,6 +174,24 @@ options:
   -c CATEGORY, --category CATEGORY
                         Specify the Category name for the imported items.
 ```
+
+## standalone/compare_type_file.py
+
+Loads two types.xml files and compares all the entries, showing which types are unique to each file and which are shared.
+
+```
+usage: compare_type_file.py [-h] -f1 file1 -f2 file2
+
+Loads two types files and compares all the entries in the types file
+
+options:
+  -h, --help            show this help message and exit
+  -f1 file1, --file1 file1
+                        Specify the first types file to compare.
+  -f2 file2, --file2 file2
+                        Specify the second types file to compare.
+```
+
 ## Attribution
 
 Some icons by [Yusuke Kamiyamane](http://p.yusukekamiyamane.com/). Licensed under a [Creative Commons Attribution 3.0 License](http://creativecommons.org/licenses/by/3.0/).
