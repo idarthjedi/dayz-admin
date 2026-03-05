@@ -118,7 +118,16 @@ if __name__ == "__main__":
         "-s",
         "--section",
         dest="section",
-        choices=["d", "default", "m", "medical", "b", "basebuilding", "m", "military"],
+        choices=[
+            "d",
+            "default",
+            "med",
+            "medical",
+            "b",
+            "basebuilding",
+            "mil",
+            "military",
+        ],
         default="d",
         help="Identifies the section of the airdrop settings file",
         action="store",
@@ -133,11 +142,11 @@ if __name__ == "__main__":
     match args.section.lower():
         case "d" | "default":
             pass
-        case "m" | "medical":
-            section = +"_Medical"
+        case "med" | "medical":
+            section += "_Medical"
         case "b" | "basebuilding":
             section += "_Basebuilding"
-        case "m" | "military":
+        case "mil" | "military":
             section += "_Military"
         case _:
             pass

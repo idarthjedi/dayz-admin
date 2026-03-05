@@ -22,21 +22,17 @@ def loadConfig() -> tuple[str, list, list, list, list]:
                 dest.write(src.read())
 
     if os.path.exists(f"{cur_dir}/app-config.json"):
-        with open(f"{cur_dir}/app-config.json") as config_file:
-            try:
+        try:
+            with open(f"{cur_dir}/app-config.json") as config_file:
                 config = json.load(config_file)
-                _config_version = float(config["config-version"])
-                _profiles_directory = config["properties"]["dayz-profile-dir"]
-                _json_directory = config["properties"]["other_dirs"]["json"]
-                _xml_directory = config["properties"]["other_dirs"]["xml"]
-                if _config_version <= 1.0:
-                    _market_directory = ""
-                    _trader_directory = ""
-                else:
-                    _market_directory = config["properties"]["market-dir"]
-                    _trader_directory = config["properties"]["trader-dir"]
-            except json.JSONDecodeError as error:
-                raise "Cannot validate app-config.json"
+        except (OSError, json.JSONDecodeError) as error:
+            raise ValueError(f"Cannot load app-config.json: {error}") from error
+
+        _profiles_directory = config["properties"]["dayz-profile-dir"]
+        _json_directory = config["properties"]["other_dirs"]["json"]
+        _xml_directory = config["properties"]["other_dirs"]["xml"]
+        _market_directory = config["properties"].get("market-dir", "")
+        _trader_directory = config["properties"].get("trader-dir", "")
 
     # TODO: Should change this into a dict object, before it grows too large!
     return (
@@ -49,7 +45,11 @@ def loadConfig() -> tuple[str, list, list, list, list]:
 
 
 def saveConfig(
-    profileDir: str, market_dir: str, traders_dir: str, json_items: [], xml_items: []
+    profileDir: str,
+    market_dir: str,
+    traders_dir: str,
+    json_items: list,
+    xml_items: list,
 ) -> bool:
 
     cur_dir = os.path.realpath(os.path.join(os.path.dirname(__file__)))

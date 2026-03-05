@@ -1,22 +1,21 @@
-from __future__ import \
-    annotations  # included to support self type reference in __init__ for parent classes
+from __future__ import annotations
 
-# see https://peps.python.org/pep-0563/
+from typing import Optional
 
 
 class Item:
 
     _name: str
     _filesource: str
-    _parent: type[Item]
-    _variants: list[type[Item]]
+    _parent: Optional[Item]
+    _variants: Optional[list[Item]]
 
     def __init__(
         self,
         name: str,
         filesource: str,
-        parent: type[Item] = None,
-        variants: list[type[Item]] = None,
+        parent: Optional[Item] = None,
+        variants: Optional[list[Item]] = None,
     ):
         self._name = name
         self._filesource = filesource
@@ -32,24 +31,23 @@ class Item:
         return self._filesource
 
     @property
-    def parent(self) -> type[Item]:
+    def parent(self) -> Optional[Item]:
         return self._parent
 
     @parent.setter
-    def parent(self, parent: type[Item]):
+    def parent(self, parent: Optional[Item]) -> None:
         self._parent = parent
 
     @property
-    def variants(self) -> list[type[Item]]:
+    def variants(self) -> Optional[list[Item]]:
         return self._variants
 
     @variants.setter
-    def variants(self, variants: list[type[Item]]):
+    def variants(self, variants: Optional[list[Item]]) -> None:
         self._variants = variants
 
     @staticmethod
-    def create_new(classname: str):
-
+    def create_new(classname: str) -> dict:
         return {
             "ClassName": classname,
             "MaxPriceThreshold": 0,

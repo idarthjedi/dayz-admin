@@ -1,23 +1,29 @@
-[tool.poetry]
+[project]
 name = "dayz-admin-tools"
 version = "0.1.0"
-description = ""
-authors = ["idarthjedi <jediah@logiodice.com>"]
+description = "A collection of utilities for DayZ server administration"
+authors = [{name = "idarthjedi", email = "jediah@logiodice.com"}]
 readme = "README.md"
-packages = [{include = "dayz_admin_tools"}]
+requires-python = ">=3.9"
+dependencies = [
+    "colorama>=0.4.6",
+    "lxml>=5.3.0",
+    "pyqt6>=6.4.2",
+    "jsonschema>=4.17.3",
+    "jsonpath-ng>=1.5.3",
+]
 
-[tool.poetry.dependencies]
-python = "^3.9"
-argparse = "^1.4.0"
-colorama = "^0.4.6"
-lxml = "^5.3.0"
-pyqt6 = "^6.4.2"
-jsonschema = "^4.17.3"
-jsonpath-ng = "^1.5.3"
-black = "==25.11.0"
-isort = "==6.1.0"
+[dependency-groups]
+dev = [
+    "black==25.11.0",
+    "isort==6.1.0",
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+]
 
+[project.scripts]
+dayz-admin = "dayz_admin_tools.cli:main"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"

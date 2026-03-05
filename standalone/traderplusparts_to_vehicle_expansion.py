@@ -11,6 +11,7 @@ from colorama import init as colorama_init
 import dayz_admin_tools.utilities.traders.expansion.Items
 from dayz_admin_tools.config import _DEBUG
 from dayz_admin_tools.utilities.files.fManager import FileManager
+from dayz_admin_tools.utilities.text import safe_filename, strip_codes
 from dayz_admin_tools.utilities.traders.expansion.Item import \
     Item as market_item
 from dayz_admin_tools.utilities.traders.traderplus.Vehicle_Parts import \
@@ -112,24 +113,6 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
     # create the Vehicle Parts file
 
     pass
-
-
-def _strip_codes(source: str) -> str:
-    control_chars = ["\n", "\t"]
-    # output = re.sub("\/\/.*", "", source).strip()
-    for c in control_chars:
-        source = source.strip(c)
-
-    return source.strip()
-
-
-def _safe_filename(source: str) -> str:
-    invalid = r'<>:"/\|?* ,'
-
-    for char in invalid:
-        source = source.replace(char, "_")
-
-    return source
 
 
 if __name__ == "__main__":
