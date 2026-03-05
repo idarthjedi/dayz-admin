@@ -20,10 +20,14 @@ DayZ Admin Tools — a collection of Python CLI utilities and a WIP GUI for mana
 ## Architecture
 
 ### `dayz_admin_tools/` — Main Package
-- `config.py` — Defines `ROOT_DIR` (project root) and `_DEBUG`. Always use `ROOT_DIR` for path resolution within the package.
-- `utilities/files/` — File helpers: `fManager.py` (`find_files`, `backup`, `return_filename`), `xml.py`, `json.py`
+- `cli.py` — Unified CLI entry point (`dayz-admin <subcommand>`). Subcommands: `validate`, `types`, `items`, `airdrop`, `convert`, `compare`
+- `config.py` — Defines `ROOT_DIR` (project root). Always use `ROOT_DIR` for path resolution within the package.
+- `defaults.py` — Centralized constants (prices, thresholds, market file defaults)
+- `log.py` — Logging setup with `ColoramaFormatter` for colored terminal output
+- `utilities/text.py` — Shared text processing: `strip_codes`, `safe_filename`, `remove_comments`, `remove_notes`
+- `utilities/files/` — File helpers: `fManager.py` (uses `pathlib`), `xml.py`, `json.py`
 - `utilities/economy/` — `Types.py` / `Type.py` for DayZ types.xml processing
-- `utilities/traders/expansion/` — Expansion Market item/vendor handling with JSON schema validation (`schemas/items.schema.json`)
+- `utilities/traders/expansion/` — Expansion Market item handling with JSON schema validation (`schemas/items.schema.json`)
 - `utilities/traders/traderplus/` — TraderPlus item/vehicle parts parsing
 
 ### `standalone/` — CLI Tools (argparse-based)
@@ -35,12 +39,14 @@ PyQt6-based GUI (`src/main.py`, `src/validatorUI.py`). Config stored at `src/con
 ## Code Conventions
 
 - **Schema-first validation**: JSON files are validated via `jsonschema.validate` before processing. Follow this pattern for new JSON handling.
-- **File discovery**: Use `FileManager.find_files(root, extension)` — don't reinvent `os.walk` logic.
+- **File discovery**: Use `FileManager.find_files(root, extension)` — uses `pathlib.rglob` internally.
 - **JSON path queries**: Use `jsonpath_ng` with `jsonpath_ng.ext.parser` for nested value extraction.
 - **CLI flags**: Follow existing conventions: `-d/--dir`, `-f/--file`, `-t/--type`.
-- **Terminal output**: Colorized via `colorama` (`Fore`, `Back`).
-- **Formatting**: `black` (v25.11.0) and `isort` (v6.1.0) — configured in `pyproject.toml`.
-- **New utilities**: Add modules under `dayz_admin_tools/utilities/<category>/` with `__init__.py`. Add corresponding CLI script under `standalone/` with argparse. Keep CLI parsing separate from business logic.
+- **Logging**: Use `dayz_admin_tools.log.setup_logging()` for colored terminal output via `logging` module. Prefer `logging` over `print()`.
+- **Text processing**: Use shared functions from `dayz_admin_tools.utilities.text` — don't duplicate `strip_codes`, `safe_filename`, etc.
+- **Constants**: Use `dayz_admin_tools.defaults` for magic numbers (prices, thresholds). Don't hardcode.
+- **Formatting**: `black` (v25.11.0) and `isort` (v6.1.0) — in dev dependency group.
+- **New utilities**: Add modules under `dayz_admin_tools/utilities/<category>/` with `__init__.py`. Add a subcommand in `cli.py`. Keep CLI parsing separate from business logic.
 
 ## Key Dependencies
 

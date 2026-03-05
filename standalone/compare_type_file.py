@@ -62,14 +62,20 @@ if __name__ == "__main__":
         description="Loads two types files and compares all the entries in the types file",
     )
     parser.add_argument(
-        "-f1", "--file1",
+        "-f1",
+        "--file1",
         help="Specify the first types file to compare.",
-        action="store", required=True, metavar="file1",
+        action="store",
+        required=True,
+        metavar="file1",
     )
     parser.add_argument(
-        "-f2", "--file2",
+        "-f2",
+        "--file2",
         help="Specify the second types file to compare.",
-        action="store", required=True, metavar="file2",
+        action="store",
+        required=True,
+        metavar="file2",
     )
 
     if len(sys.argv) < 3:

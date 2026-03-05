@@ -16,7 +16,9 @@ class FileManager:
         shutil.copy(path, new_filename)
 
     @staticmethod
-    def return_filename(fullpath_filename: str, split_extension: bool = False) -> tuple | str:
+    def return_filename(
+        fullpath_filename: str, split_extension: bool = False
+    ) -> tuple | str:
         path = Path(fullpath_filename)
         if not split_extension:
             return path.name
@@ -31,6 +33,5 @@ class FileManager:
     def find_files(filepath: str, extension: str) -> list[str]:
         root = Path(filepath)
         return [
-            str(p) for p in root.rglob(f"*{extension}")
-            if not p.name.startswith(".")
+            str(p) for p in root.rglob(f"*{extension}") if not p.name.startswith(".")
         ]

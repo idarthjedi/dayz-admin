@@ -11,9 +11,9 @@ from colorama import init as colorama_init
 import dayz_admin_tools.utilities.traders.expansion.Items
 from dayz_admin_tools.config import _DEBUG
 from dayz_admin_tools.utilities.files.fManager import FileManager
+from dayz_admin_tools.utilities.text import safe_filename, strip_codes
 from dayz_admin_tools.utilities.traders.expansion.Item import \
     Item as market_item
-from dayz_admin_tools.utilities.text import safe_filename, strip_codes
 from dayz_admin_tools.utilities.traders.traderplus.Items import \
     Items as trader_items
 
@@ -96,7 +96,6 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
 
             if _DEBUG:
                 print(json.dumps(market_file, indent=2))
-
 
 
 if __name__ == "__main__":

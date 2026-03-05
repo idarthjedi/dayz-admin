@@ -1,7 +1,8 @@
 import re
 
 from dayz_admin_tools.utilities.files.fManager import FileManager
-from dayz_admin_tools.utilities.text import remove_comments, remove_notes, strip_codes
+from dayz_admin_tools.utilities.text import (remove_comments, remove_notes,
+                                             strip_codes)
 
 
 class Items(dict):
@@ -58,4 +59,3 @@ class Items(dict):
                     new_lines.append(line)
 
         return new_lines
-

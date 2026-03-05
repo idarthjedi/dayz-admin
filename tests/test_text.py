@@ -1,9 +1,5 @@
-from dayz_admin_tools.utilities.text import (
-    remove_comments,
-    remove_notes,
-    safe_filename,
-    strip_codes,
-)
+from dayz_admin_tools.utilities.text import (remove_comments, remove_notes,
+                                             safe_filename, strip_codes)
 
 
 class TestStripCodes:

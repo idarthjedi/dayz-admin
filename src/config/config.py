@@ -45,7 +45,11 @@ def loadConfig() -> tuple[str, list, list, list, list]:
 
 
 def saveConfig(
-    profileDir: str, market_dir: str, traders_dir: str, json_items: list, xml_items: list
+    profileDir: str,
+    market_dir: str,
+    traders_dir: str,
+    json_items: list,
+    xml_items: list,
 ) -> bool:
 
     cur_dir = os.path.realpath(os.path.join(os.path.dirname(__file__)))
