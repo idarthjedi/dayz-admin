@@ -13,6 +13,7 @@ from dayz_admin_tools.config import _DEBUG
 from dayz_admin_tools.utilities.files.fManager import FileManager
 from dayz_admin_tools.utilities.traders.expansion.Item import \
     Item as market_item
+from dayz_admin_tools.utilities.text import safe_filename, strip_codes
 from dayz_admin_tools.utilities.traders.traderplus.Items import \
     Items as trader_items
 
@@ -48,8 +49,8 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
             # strip comments if they exist
             category = items_list.pop(0)
 
-            category = _strip_codes(category)
-            category_filename = _safe_filename(category)
+            category = strip_codes(category)
+            category_filename = safe_filename(category)
 
             if _DEBUG:
                 print(f"Categories: {category} ")
@@ -66,8 +67,8 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
 
                         # some files are malformed and don't have prices
                         if len(items_collection) >= 3:
-                            tmp_price = int(_strip_codes(items_collection[1]))
-                            tmp_price2 = int(_strip_codes(items_collection[2]))
+                            tmp_price = int(strip_codes(items_collection[1]))
+                            tmp_price2 = int(strip_codes(items_collection[2]))
                             if tmp_price == -1:
                                 price = tmp_price2
                             else:
@@ -83,7 +84,7 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
 
                         for item_prop in items_collection:
                             if _DEBUG:
-                                print(f"Item Property: {_strip_codes(item_prop)}")
+                                print(f"Item Property: {strip_codes(item_prop)}")
 
             market_file["DisplayName"] = category
 
@@ -96,23 +97,6 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
             if _DEBUG:
                 print(json.dumps(market_file, indent=2))
 
-
-def _strip_codes(source: str) -> str:
-    control_chars = ["\n", "\t"]
-    # output = re.sub("\/\/.*", "", source).strip()
-    for c in control_chars:
-        source = source.strip(c)
-
-    return source.strip()
-
-
-def _safe_filename(source: str) -> str:
-    invalid = r'<>:"/\|?* ,'
-
-    for char in invalid:
-        source = source.replace(char, "_")
-
-    return source
 
 
 if __name__ == "__main__":

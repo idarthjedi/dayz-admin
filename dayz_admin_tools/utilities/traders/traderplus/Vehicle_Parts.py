@@ -1,6 +1,7 @@
 import re
 
 from dayz_admin_tools.utilities.files.fManager import FileManager
+from dayz_admin_tools.utilities.text import remove_comments, remove_notes, strip_codes
 
 
 class Vehicle_Parts(dict):
@@ -39,7 +40,7 @@ class Vehicle_Parts(dict):
         vehicle_name = ""
         for line in input_list:
             # remove all the \t and \n from the start/end
-            line = self._strip_codes(line)
+            line = strip_codes(line)
             # if line has any <XYZ> that is not category (e.g. <CurrencyTrader>, <Currency>, <Trader>, etc. - skip it.
             result = regex.match(line)
             if result is not None:
@@ -48,66 +49,19 @@ class Vehicle_Parts(dict):
                     continue
                 else:
                     # Set category name
-                    line = self._remove_comments(line)
-                    line = self._remove_notes(line)
+                    line = remove_comments(line)
+                    line = remove_notes(line)
                     # new_lines.append(line.replace("<VehicleParts> ", ""))
-                    vehicle_name = self._strip_codes(
+                    vehicle_name = strip_codes(
                         line.replace("<VehicleParts>", "").strip()
                     )
                     new_lines[vehicle_name] = []
 
             else:
                 if line != "":
-                    line = self._remove_comments(line)
-                    line = self._remove_notes(line)
+                    line = remove_comments(line)
+                    line = remove_notes(line)
                     new_lines[vehicle_name].append(line)
 
         return new_lines
 
-    def _strip_codes(self, source: str) -> str:
-        control_chars = ["\n", "\t"]
-        # output = re.sub("\/\/.*", "", source).strip()
-        for c in control_chars:
-            source = source.strip(c)
-
-        return source.strip()
-
-    def _safe_filename(self, source: str) -> str:
-        invalid = r'<>:"/\|?* ,'
-
-        for char in invalid:
-            source = source.replace(char, "_")
-
-        return source
-
-    def _remove_notes(self, string):
-        pattern = r"(<<.*>>)"
-        regex = re.compile(pattern, re.MULTILINE | re.DOTALL)
-
-        def _replacer(match):
-            if match.group(1) is not None:
-                return ""
-
-        return regex.sub(_replacer, string)
-
-    def _remove_comments(self, string):
-        """
-        Code taken from: https://stackoverflow.com/questions/2319019/using-regex-to-remove-comments-from-source-files
-
-        :param string:
-        :return:
-        """
-        pattern = r"(\".*?\"|\'.*?\')|(/\*.*?\*/|//[^\r\n]*$)"
-        # first group captures quoted strings (double or single)
-        # second group captures comments (//single-line or /* multi-line */)
-        regex = re.compile(pattern, re.MULTILINE | re.DOTALL)
-
-        def _replacer(match):
-            # if the 2nd group (capturing comments) is not None,
-            # it means we have captured a non-quoted (real) comment string.
-            if match.group(2) is not None:
-                return ""  # so we will return empty to remove the comment
-            else:  # otherwise, we will return the 1st group
-                return match.group(1)  # captured quoted-string
-
-        return regex.sub(_replacer, string)
