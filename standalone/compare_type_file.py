@@ -1,3 +1,4 @@
+import logging
 import os
 import sys
 from pathlib import Path
@@ -7,10 +8,12 @@ if sys.argv:
 
 import argparse
 
-from colorama import Fore
 from colorama import init as colorama_init
 
+from dayz_admin_tools.log import setup_logging
 from dayz_admin_tools.utilities.economy.Types import Types
+
+log = logging.getLogger(__name__)
 
 
 def compare_types(file1: str, file2: str) -> None:
@@ -21,15 +24,15 @@ def compare_types(file1: str, file2: str) -> None:
     success2, errors2 = types2.load_types(file2)
 
     if not success1:
-        print(Fore.RED + f"Failed to load {file1}:")
+        log.error(f"Failed to load {file1}:")
         for err in errors1:
-            print(f"\t{err}")
+            log.error(f"\t{err}")
         return
 
     if not success2:
-        print(Fore.RED + f"Failed to load {file2}:")
+        log.error(f"Failed to load {file2}:")
         for err in errors2:
-            print(f"\t{err}")
+            log.error(f"\t{err}")
         return
 
     set1 = set(types1.keys())
@@ -39,24 +42,25 @@ def compare_types(file1: str, file2: str) -> None:
     only_in_file2 = set2 - set1
     in_both = set1 & set2
 
-    print(Fore.GREEN + f"Types in both files: {len(in_both)}")
+    log.info(f"Types in both files: {len(in_both)}")
 
     if only_in_file1:
-        print(Fore.YELLOW + f"\nTypes only in {file1} ({len(only_in_file1)}):")
+        log.warning(f"\nTypes only in {file1} ({len(only_in_file1)}):")
         for name in sorted(only_in_file1):
-            print(f"\t{name}")
+            log.warning(f"\t{name}")
 
     if only_in_file2:
-        print(Fore.YELLOW + f"\nTypes only in {file2} ({len(only_in_file2)}):")
+        log.warning(f"\nTypes only in {file2} ({len(only_in_file2)}):")
         for name in sorted(only_in_file2):
-            print(f"\t{name}")
+            log.warning(f"\t{name}")
 
     if not only_in_file1 and not only_in_file2:
-        print(Fore.GREEN + "Files contain identical type sets.")
+        log.info("Files contain identical type sets.")
 
 
 if __name__ == "__main__":
     colorama_init()
+    setup_logging()
     parser = argparse.ArgumentParser(
         prog=f"{sys.argv[0]}",
         description="Loads two types files and compares all the entries in the types file",

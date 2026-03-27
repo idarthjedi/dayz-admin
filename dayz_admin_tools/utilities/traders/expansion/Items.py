@@ -8,6 +8,13 @@ from jsonpath_ng.ext import parser as json_parser
 from jsonschema import validate as json_validate
 
 from dayz_admin_tools.config import ROOT_DIR
+from dayz_admin_tools.defaults import (
+    MARKET_DEFAULT_COLOR,
+    MARKET_DEFAULT_ICON,
+    MARKET_DEFAULT_INIT_STOCK_PERCENT,
+    MARKET_DEFAULT_IS_EXCHANGE,
+    MARKET_FILE_VERSION,
+)
 from dayz_admin_tools.utilities.files.fManager import FileManager
 from dayz_admin_tools.utilities.traders.expansion.Item import Item
 
@@ -90,32 +97,17 @@ class Items(dict):
                         else:
                             self[variant] = Item(variant, file, parent)
 
-        # JSON turned out to be valid per schema, loop through each of the Items and create an Item object
-
-        #        # xml turned out to be valid per schema, loop through each of the type in types and create an type object
-        #        all_types = xml_doc.xpath("//types/type")
-        #        for each_type in all_types:
-        #            obj_name = each_type.attrib['name']
-        #            if obj_name in self:
-        #                errors.append(f"Object {obj_name} duplications:{os.linesep}"\
-        #                              f"\t{Fore.GREEN}Winner: {self[obj_name].filesource}{os.linesep}"\
-        #                              f"\t{Fore.RED}Loser: {file}.")
-        #
-        #            else:
-        #                # Only append if there wasn't a duplicate already
-        #                self[obj_name] = Type(obj_name, file)
-        #
         return len(errors) == 0, errors
 
     @staticmethod
     def file_header() -> dict:
 
         return {
-            "m_Version": 12,
+            "m_Version": MARKET_FILE_VERSION,
             "DisplayName": "",
-            "Icon": "Deliver",
-            "Color": "FBFCFEFF",
-            "IsExchange": 0,
-            "InitStockPercent": 25.0,
+            "Icon": MARKET_DEFAULT_ICON,
+            "Color": MARKET_DEFAULT_COLOR,
+            "IsExchange": MARKET_DEFAULT_IS_EXCHANGE,
+            "InitStockPercent": MARKET_DEFAULT_INIT_STOCK_PERCENT,
             "Items": [],
         }

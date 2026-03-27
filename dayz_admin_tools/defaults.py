@@ -15,13 +15,28 @@ DEFAULT_MIN_STOCK_THRESHOLD = 1
 DEFAULT_QUANTITY_PERCENT = -1
 
 # Generic vehicle parts (common across all vehicle conversions)
-GENERIC_VEHICLE_PARTS = [
-    "SparkPlug",
-    "CarBattery",
-    "CarRadiator",
-    "HeadlightH7",
-    "TruckBattery",
-]
+GENERIC_VEHICLE_PARTS = frozenset(
+    {
+        "SparkPlug",
+        "CarBattery",
+        "CarRadiator",
+        "HeadlightH7",
+        "TruckBattery",
+    }
+)
+
+# Airdrop section mapping (alias -> suffix)
+AIRDROP_SECTION_MAP = {
+    "d": "",
+    "default": "",
+    "med": "_Medical",
+    "medical": "_Medical",
+    "b": "_Basebuilding",
+    "basebuilding": "_Basebuilding",
+    "mil": "_Military",
+    "military": "_Military",
+}
+AIRDROP_CONTAINER_BASE = "ExpansionAirdropContainer"
 
 # Config
 CONFIG_VERSION = 1.1

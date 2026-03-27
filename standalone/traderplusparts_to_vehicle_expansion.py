@@ -2,33 +2,24 @@ import argparse
 import json
 import math
 import os
-import re
 import sys
 
-from colorama import Back, Fore, Style
 from colorama import init as colorama_init
 
 import dayz_admin_tools.utilities.traders.expansion.Items
 from dayz_admin_tools.config import _DEBUG
+from dayz_admin_tools.defaults import DEFAULT_PRICE, GENERIC_VEHICLE_PARTS
 from dayz_admin_tools.utilities.files.fManager import FileManager
 from dayz_admin_tools.utilities.text import safe_filename, strip_codes
-from dayz_admin_tools.utilities.traders.expansion.Item import \
-    Item as market_item
-from dayz_admin_tools.utilities.traders.traderplus.Vehicle_Parts import \
-    Vehicle_Parts as trader_items
+from dayz_admin_tools.utilities.traders.expansion.Item import Item as market_item
+from dayz_admin_tools.utilities.traders.traderplus.Vehicle_Parts import (
+    Vehicle_Parts as trader_items,
+)
 
 
-def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
+def main(filename: str, default_price: int = DEFAULT_PRICE, multiplier: float = 1.0):
 
-    # list of generic parts to not include in the main parts file, but to put in a generic parts file
-    generic_vehicle_parts = [
-        "SparkPlug",
-        "CarBattery",
-        "CarRadiator",
-        "HeadlightH7",
-        "TruckBattery",
-    ]
-    unique_parts_names = []
+    unique_parts_names = set()
 
     trader_items_object = trader_items(filename)
     market_file = dayz_admin_tools.utilities.traders.expansion.Items.Items.file_header()
@@ -51,25 +42,20 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
     # create the main vehicle file
     for vehicle in new_lines:
         created_item = market_item.create_new(vehicle)
-        price = default_price
-        created_item["MaxPriceThreshold"] = math.floor(float(price) * multiplier)
-        created_item["MinPriceThreshold"] = math.floor(float(price) * multiplier)
+        price = math.floor(default_price * multiplier)
+        created_item["MaxPriceThreshold"] = price
+        created_item["MinPriceThreshold"] = price
         for attachment in new_lines[vehicle]:
 
             created_item["SpawnAttachments"].append(attachment)
             if attachment not in unique_parts_names:
-                if attachment not in generic_vehicle_parts:
+                if attachment not in GENERIC_VEHICLE_PARTS:
                     parts_created_item = market_item.create_new(attachment)
-                    price = default_price
-                    parts_created_item["MaxPriceThreshold"] = math.floor(
-                        float(price) * multiplier
-                    )
-                    parts_created_item["MinPriceThreshold"] = math.floor(
-                        float(price) * multiplier
-                    )
+                    parts_created_item["MaxPriceThreshold"] = price
+                    parts_created_item["MinPriceThreshold"] = price
                     parts_collection.append(parts_created_item)
 
-                    unique_parts_names.append(attachment)
+                    unique_parts_names.add(attachment)
 
         market_collection.append(created_item)
 
@@ -98,11 +84,11 @@ def main(filename: str, default_price: int = 500, multiplier: float = 1.0):
     )
     generic_collection = generic_market_file["Items"]
 
-    for part in generic_vehicle_parts:
+    generic_price = math.floor(default_price * multiplier)
+    for part in GENERIC_VEHICLE_PARTS:
         created_item = market_item.create_new(part)
-        price = default_price
-        created_item["MaxPriceThreshold"] = math.floor(float(price) * multiplier)
-        created_item["MinPriceThreshold"] = math.floor(float(price) * multiplier)
+        created_item["MaxPriceThreshold"] = generic_price
+        created_item["MinPriceThreshold"] = generic_price
         generic_collection.append(created_item)
 
     generic_market_file["DisplayName"] = "Generic Vehicle Parts"

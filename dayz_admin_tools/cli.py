@@ -4,6 +4,11 @@ import sys
 
 from colorama import init as colorama_init
 
+from dayz_admin_tools.defaults import (
+    AIRDROP_CONTAINER_BASE,
+    AIRDROP_SECTION_MAP,
+    DEFAULT_PRICE,
+)
 from dayz_admin_tools.log import setup_logging
 
 log = logging.getLogger(__name__)
@@ -46,16 +51,8 @@ def cmd_items(args: argparse.Namespace) -> None:
 def cmd_airdrop(args: argparse.Namespace) -> None:
     from standalone.airdrop_loader import main as airdrop_main
 
-    section = "ExpansionAirdropContainer"
-    match args.section.lower():
-        case "d" | "default":
-            pass
-        case "med" | "medical":
-            section += "_Medical"
-        case "b" | "basebuilding":
-            section += "_Basebuilding"
-        case "mil" | "military":
-            section += "_Military"
+    suffix = AIRDROP_SECTION_MAP.get(args.section.lower(), "")
+    section = AIRDROP_CONTAINER_BASE + suffix
     airdrop_main(args.dir, args.item, args.file, section)
 
 
@@ -69,8 +66,7 @@ def cmd_convert_traderplus(args: argparse.Namespace) -> None:
 
 
 def cmd_convert_vehicle_parts(args: argparse.Namespace) -> None:
-    from standalone.traderplusparts_to_vehicle_expansion import \
-        main as convert_main
+    from standalone.traderplusparts_to_vehicle_expansion import main as convert_main
 
     kwargs = {"filename": args.file}
     if args.multiplier:
@@ -183,7 +179,9 @@ def main() -> None:
         "types-to-market", help="Convert types.xml to market file"
     )
     p_ttm.add_argument("-f", "--file", required=True, help="Types file to convert")
-    p_ttm.add_argument("-p", "--price", type=int, default=500, help="Default price")
+    p_ttm.add_argument(
+        "-p", "--price", type=int, default=DEFAULT_PRICE, help="Default price"
+    )
     p_ttm.add_argument("-c", "--category", required=True, help="Category name")
     p_ttm.set_defaults(func=cmd_convert_types_to_market)
 

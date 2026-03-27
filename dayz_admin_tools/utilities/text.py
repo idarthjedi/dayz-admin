@@ -1,5 +1,10 @@
 import re
 
+_NOTES_RE = re.compile(r"(<<.*>>)", re.MULTILINE | re.DOTALL)
+_COMMENTS_RE = re.compile(
+    r"(\".*?\"|\'.*?\')|(/\*.*?\*/|//[^\r\n]*$)", re.MULTILINE | re.DOTALL
+)
+
 
 def strip_codes(source: str) -> str:
     """Strip control characters (newline, tab) and whitespace from a string."""
@@ -19,20 +24,16 @@ def safe_filename(source: str) -> str:
 
 def remove_notes(string: str) -> str:
     """Remove <<note>> markers from a string."""
-    pattern = r"(<<.*>>)"
-    regex = re.compile(pattern, re.MULTILINE | re.DOTALL)
 
     def _replacer(match):
         if match.group(1) is not None:
             return ""
 
-    return regex.sub(_replacer, string)
+    return _NOTES_RE.sub(_replacer, string)
 
 
 def remove_comments(string: str) -> str:
     """Remove // and /* */ comments while preserving quoted strings."""
-    pattern = r"(\".*?\"|\'.*?\')|(/\*.*?\*/|//[^\r\n]*$)"
-    regex = re.compile(pattern, re.MULTILINE | re.DOTALL)
 
     def _replacer(match):
         if match.group(2) is not None:
@@ -40,4 +41,4 @@ def remove_comments(string: str) -> str:
         else:
             return match.group(1)
 
-    return regex.sub(_replacer, string)
+    return _COMMENTS_RE.sub(_replacer, string)

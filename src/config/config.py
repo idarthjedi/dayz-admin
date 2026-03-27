@@ -15,24 +15,24 @@ def loadConfig() -> tuple[str, list, list, list, list]:
     :return: profile_directory, market_directory, trader_directory, json_directory, xml_directory
     """
     cur_dir = os.path.realpath(os.path.join(os.path.dirname(__file__)))
-    # Load config file if it exists
-    if not os.path.exists(f"{cur_dir}/app-config.json"):
+    config_path = f"{cur_dir}/app-config.json"
+
+    if not os.path.exists(config_path):
         with open(f"{cur_dir}/src/app-config.latest.json", "r") as src:
-            with open(f"{cur_dir}/app-config.json", "w") as dest:
+            with open(config_path, "w") as dest:
                 dest.write(src.read())
 
-    if os.path.exists(f"{cur_dir}/app-config.json"):
-        try:
-            with open(f"{cur_dir}/app-config.json") as config_file:
-                config = json.load(config_file)
-        except (OSError, json.JSONDecodeError) as error:
-            raise ValueError(f"Cannot load app-config.json: {error}") from error
+    try:
+        with open(config_path) as config_file:
+            config = json.load(config_file)
+    except (OSError, json.JSONDecodeError) as error:
+        raise ValueError(f"Cannot load app-config.json: {error}") from error
 
-        _profiles_directory = config["properties"]["dayz-profile-dir"]
-        _json_directory = config["properties"]["other_dirs"]["json"]
-        _xml_directory = config["properties"]["other_dirs"]["xml"]
-        _market_directory = config["properties"].get("market-dir", "")
-        _trader_directory = config["properties"].get("trader-dir", "")
+    _profiles_directory = config["properties"]["dayz-profile-dir"]
+    _json_directory = config["properties"]["other_dirs"]["json"]
+    _xml_directory = config["properties"]["other_dirs"]["xml"]
+    _market_directory = config["properties"].get("market-dir", "")
+    _trader_directory = config["properties"].get("trader-dir", "")
 
     # TODO: Should change this into a dict object, before it grows too large!
     return (
@@ -54,7 +54,9 @@ def saveConfig(
 
     cur_dir = os.path.realpath(os.path.join(os.path.dirname(__file__)))
 
-    data = {"config-version": 1.1}
+    from dayz_admin_tools.defaults import CONFIG_VERSION
+
+    data = {"config-version": CONFIG_VERSION}
     properties = {
         "dayz-profile-dir": profileDir,
         "market-dir": market_dir,

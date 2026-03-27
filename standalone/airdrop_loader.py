@@ -6,6 +6,7 @@ import sys
 from jsonpath_ng import jsonpath
 from jsonpath_ng.ext import parser as json_parser
 
+from dayz_admin_tools.defaults import AIRDROP_CONTAINER_BASE, AIRDROP_SECTION_MAP
 from dayz_admin_tools.utilities.files.fManager import FileManager
 from src.config import config
 
@@ -82,8 +83,6 @@ def main(
 
 if __name__ == "__main__":
 
-    section = "ExpansionAirdropContainer"
-
     parser = argparse.ArgumentParser(
         prog="airdrop_loader.py",
         description="Searches for objects in a specified market file, "
@@ -139,34 +138,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    match args.section.lower():
-        case "d" | "default":
-            pass
-        case "med" | "medical":
-            section += "_Medical"
-        case "b" | "basebuilding":
-            section += "_Basebuilding"
-        case "mil" | "military":
-            section += "_Military"
-        case _:
-            pass
+    suffix = AIRDROP_SECTION_MAP.get(args.section.lower(), "")
+    section = AIRDROP_CONTAINER_BASE + suffix
 
     main(args.dir, args.item, args.file, section)
-#    example calls:
-#    main(args.dir, "Diesel_TortillaBag", "joe_dfal_backpacks.json", section)
-#    main(args.dir, "Diesel_DFAL", "joe_dfal.json", section)
-#    main(args.dir, "Diesel_DFALZ", "joe_dfal.json", section)
-#    main(args.dir, "Diesel_TacticalGloves", "joe_clothes.json", section)
-#    main(args.dir, "Diesel_Suppressor", "joe_dfal_supp.json", section)
-#    main(args.dir, "Diesel_HuntingOptic", "joe_dfal_opt.json", section)
-#    main(args.dir, "Diesel_AttackVestPouches", "joe_clothes.json", section)
-#    main(args.dir, "Diesel_GorkaJacket", "joe_clothes.json", section)
-#    main(args.dir, "Diesel_GorkaPants", "joe_clothes.json", section)
-#    main(args.dir, "Diesel_HikingLow", "joe_clothes.json", section)
-#
-#    main(args.dir, "Diesel_GhillieAtt", "joe_ghillies.json", section)
-#    main(args.dir, "Diesel_GhillieHood", "joe_ghillies.json", section)
-#    main(args.dir, "Diesel_Ghillie_Mossy", "joe_ghillies.json", section)
-#    main(args.dir, "Diesel_Ghillie_Armband", "joe_ghillies.json", section)
-#    main(args.dir, "Diesel_WarriorHelmet", "joe_clothes.json", section)
-#

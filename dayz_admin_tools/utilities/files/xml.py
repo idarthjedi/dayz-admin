@@ -14,12 +14,12 @@ class XMLManager(FileManager):
         file_count = 0
 
         files = FileManager.find_files(filepath, ".xml")
+        sax_parser = make_parser()
+        sax_parser.setContentHandler(ContentHandler())
 
         for file in files:
             try:
-                parser = make_parser()
-                parser.setContentHandler(ContentHandler())
-                parser.parse(file)
+                sax_parser.parse(file)
                 file_count += 1
             except xml.sax.SAXParseException:
                 output.append(file)

@@ -2,6 +2,13 @@ from __future__ import annotations
 
 from typing import Optional
 
+from dayz_admin_tools.defaults import (
+    DEFAULT_MAX_STOCK_THRESHOLD,
+    DEFAULT_MIN_STOCK_THRESHOLD,
+    DEFAULT_QUANTITY_PERCENT,
+    DEFAULT_SELL_PRICE_PERCENT,
+)
+
 
 class Item:
 
@@ -52,10 +59,10 @@ class Item:
             "ClassName": classname,
             "MaxPriceThreshold": 0,
             "MinPriceThreshold": 0,
-            "SellPricePercent": -1.0,
-            "MaxStockThreshold": 1,
-            "MinStockThreshold": 1,
-            "QuantityPercent": -1,
+            "SellPricePercent": DEFAULT_SELL_PRICE_PERCENT,
+            "MaxStockThreshold": DEFAULT_MAX_STOCK_THRESHOLD,
+            "MinStockThreshold": DEFAULT_MIN_STOCK_THRESHOLD,
+            "QuantityPercent": DEFAULT_QUANTITY_PERCENT,
             "SpawnAttachments": [],
             "Variants": [],
         }

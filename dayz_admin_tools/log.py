@@ -18,6 +18,7 @@ class ColoramaFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         color = self.COLORS.get(record.levelno, "")
         reset = Style.RESET_ALL
+        record = logging.makeLogRecord(record.__dict__)
         record.msg = f"{color}{record.msg}{reset}"
         return super().format(record)
 
@@ -31,9 +32,10 @@ def setup_logging(verbose: bool = False, quiet: bool = False) -> None:
     else:
         level = logging.INFO
 
+    root = logging.getLogger()
+    root.handlers.clear()
+    root.setLevel(level)
+
     handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(ColoramaFormatter("%(message)s"))
-
-    root = logging.getLogger()
-    root.setLevel(level)
     root.addHandler(handler)

@@ -1,12 +1,10 @@
 import re
 
 from dayz_admin_tools.utilities.files.fManager import FileManager
-from dayz_admin_tools.utilities.text import (remove_comments, remove_notes,
-                                             strip_codes)
+from dayz_admin_tools.utilities.text import remove_comments, remove_notes, strip_codes
 
 
 class Items(dict):
-    # _types = {}
 
     _filename = ""
 
@@ -39,7 +37,6 @@ class Items(dict):
 
         new_lines = []
         for line in input_list:
-            # remove all the \t and \n from the start/end
             line = strip_codes(line)
             # if line has any <XYZ> that is not category (e.g. <CurrencyTrader>, <Currency>, <Trader>, etc. - skip it.
             result = regex.match(line)
